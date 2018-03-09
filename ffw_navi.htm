@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Navigation</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<link rel='stylesheet' type='text/css' href='ffw.css'>
+<SCRIPT type="text/javascript">
+	var DHTML = false, DOM = false, MSIE4 = false, NS4 = false, OP = false;
+
+	if (document.getElementById) {
+ 	 DHTML = true;
+ 	 DOM = true;
+	} else {
+  	if (document.all) {
+    DHTML = true;
+    MSIE4 = true;
+  	} else {
+     if (document.layers) {
+      DHTML = true;
+      NS4 = true;
+     }
+  	 }
+	}
+if (window.opera) {
+  OP = true;
+}
+	var laut = new Image(); 	laut.src = "laut.gif";
+	var leise = new Image();	leise.src = "leise.gif";
+	var gelb = new Image();		gelb.src = "gelb.gif";
+	var nabc = new Image();		nabc.src = "nabc.gif";
+	var n123 = new Image();		n123.src = "n123.gif";
+	var nur = new Image();		nur.src = "nur.gif";
+	var auto = new Image();		auto.src = "auto.gif";
+
+	function AnAus(id) {
+		if (parent.Index.Laut) {
+			an(id,laut.src); parent.Index.Laut=false; parent.Index.Feedback=true;
+		} else {
+			if (parent.Index.Feedback) {
+				an(id,leise.src); parent.Index.Laut=false; parent.Index.Feedback=false;
+			} else {
+				an(id,gelb.src); parent.Index.Laut=true; parent.Index.Feedback=false;
+			}
+		}
+	}
+
+	function an(nr,bild)    {    window.document.images[nr+2].src = bild;    }
+
+	function StartWerte() {
+		if (!parent.Index.Laut)  if (parent.Index.Feedback) { an(1,laut.src); } else { an(1,leise.src);}
+		if (!parent.Index.Reihe) an(2,n123.src);
+		if (!parent.Index.Ordnung) an(3,nabc.src);
+		if (!parent.Index.AlleFragen)  if (parent.Index.Automat) { an(4,auto.src); } else { an(4,nur.src);}
+		if (true) {
+			for (var i = 0; i < 3; i++){
+				if (!NS4) window.document.images[i].style.display = "none";
+			}
+		}
+	//	if (!parent.Index.AlleFragen) an(4,nur.src);
+	}
+
+</script>
+
+</head>
+<body style='margin: 0;' onLoad="StartWerte()">
+<A href="javascript:parent.Index.StelleFrage(-1);">
+<IMG SRC='back.gif' Border='0' Width='23' Height='21' Alt='vorherige Frage anzeigen'></A>
+<A href="javascript:parent.Index.StelleFrage(0);">
+<IMG SRC='nr.gif' Border='0' Width='36' Height='21' Alt='Beliebige Frage auswaehlen'></A>
+<A href="javascript:parent.Index.StelleFrage(1);">
+<IMG SRC='vor.gif' Border='0' Width='23' Height='21' Alt='Naechste Frage anzeigen'></A>
+<A HREF="javascript:AnAus(1);"><IMG SRC='gelb.gif' border='0' Width='26' Height='20' Alt='Art der Fehlermeldung umschalten'></A>
+<IMG SRC='123.gif' Border=0 Width=26 Height=20 Alt='Reihenfolge Fragen'>
+<IMG SRC='abc.gif' Border=0 Width=26 Height=20 Alt='Reihenfolge Antworten'>
+<IMG SRC='alle.gif' Border=0 Width=26 Height=20 Alt='Umfang der Fragen'>
+<A href="javascript:parent.Index.Statistik();">
+<IMG SRC='ende.gif' Border='0' Width='27' Height='21' Alt='Kapitel vorzeitig beenden'></A><br>
+<script type="text/javascript">
+  document.writeln("<b style='color:#008;'>"+parent.Index.Nickname+"</b>");
+</script>
+</body>
+</html>

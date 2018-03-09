@@ -1,0 +1,164 @@
+body {
+ font: normal normal 100% Arial, Helvetica, sans-serif;
+ color: black;
+ background-color: #fff;
+ margin:5px 15px;
+}
+
+.kopf {
+ font: normal bold 170% Arial, Helvetica, sans-serif;
+ border-bottom:solid 1px black;
+ padding:0.5em 0 0 0;
+}
+
+h1 {
+	font-size: 200%;
+	color:#151;
+	margin:0.5em 0;
+}
+
+h2 {
+	font-size: 175%;
+	color:#262;
+	margin:0.5em 0;
+}
+
+h2.kapitel {
+	font-size: 140%;
+}
+
+h2.stichworte {
+	margin:0.2em 0 0em 0;
+}
+
+h3 {
+	font-size: 115%;
+	line-height:140%;
+	color:#393;
+	padding:0 0 0 25px;
+	margin:1em 0;
+	border-bottom:solid 1px black;
+	background:transparent url(gruen.gif) no-repeat center left;
+}
+
+h3.links {
+   margin:0.7em 0 0.4em 0;
+   width: 120px;
+}
+
+div.missing {
+	border:solid 2px red;
+	margin:1em 0;
+	color:inherit;
+	background:#fee;
+}
+
+div.missing h2 {
+  color:#fff;
+  background:red;
+  margin:0;
+  padding:0.1em 20px;
+}
+
+div.missing p {
+ padding:0 20px;
+}
+
+#Nav a, #Nav a:link, #Nav a:visited {
+ text-decoration: none;
+}
+
+#Nav a:hover, #Nav a:active {
+ text-decoration: underline;
+}
+
+.rot, .pink, .blau, .gruen, .black, .gelb {
+  background: transparent;
+  font-weight: bold;
+}
+
+.rot   	{ color: red;}
+.pink   	{ color: #f0f;}
+.blau   	{ color: #00f;}
+.gruen 	{ color: #080;}
+.black 	{ color: black;}
+.gelb    {
+ color: #ff0;
+ background-color: #000;
+ padding:1px 0.5em;
+}
+
+
+
+.hgRot, .hgGruen, .hgBlau, .hgMetall, .hgGrau, .hgGelb, .hgPink, .hgSchwarz {
+ padding: 1px 0.5em;
+ font-weight: bold;
+ color: white;
+}
+
+.hgRot	 { background-color: #f00;}
+.hgGruen  { background-color: #080;}
+.hgBlau   { background-color: #00f;}
+.hgMetall { background-color: #66f;}
+.hgGrau   { background-color: #777;}
+.hgGelb   { background-color: #ffc; color: black; font-weight: normal;}
+.hgPink   { background-color: #808;}
+.hgSchwarz{ background-color: #000;}
+
+.fett {font-weight: bold;}
+.rand {border:solid 1px black; margin:2px 0;}
+
+.gross {
+	background-color:#fff7de;
+	border:solid 1px black;
+	padding:0.5em 1em;
+	margin:0 0 1em 0;
+}
+
+input.eingabe {
+  font-size:100%;
+}
+
+input.antwort {
+  width: 3em;
+  height: 2em;
+  font-weight: bold;
+}
+
+p.antwort {
+  padding:0 0 0.5em 0;
+  cursor:pointer;
+}
+
+.hlfs {
+  font-size: 145%;
+  font-weight: bold;
+}
+
+.raum {
+  margin: 5px;
+}
+
+.klein {
+  font-size:80%;
+}
+
+table.frage {
+	font-size: 115%;
+}
+
+table.frage td {
+	padding-right: 0.5em;
+}
+
+
+span.ok {
+ background-color: #ffff99;
+}
+
+tr.offen    { color:inherit; background-color: #ff8;}
+td,th 		{ padding-left:3px; }
+
+.nobr {white-space: nowrap;}
+.hidden {display: none; }
+.mischen {margin-bottom: 0.5em;}

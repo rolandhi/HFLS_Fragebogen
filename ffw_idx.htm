@@ -1,0 +1,3527 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+       "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<title>Feuerwehr-Fragebogen</title>
+<meta http-equiv='content-type' content='text/html; charset=ISO-8859-1'>
+<link rel="stylesheet" type="text/css" href='ffw.css'>
+
+<script type="text/javascript">
+if (parent.frames.length<1) window.top.location.href="fragebogen.htm";
+
+function makeFragen(n) {
+	this.length=n;
+	for (var i=1;i<=n;i++) this[i]=new Question();
+}
+
+function makeArray(n) {
+	for (var i=1;i<=n;i++) this[i]=0;
+}
+
+function makeArray0(n) {
+	for (var i=0;i<=n;i++) this[i]=0;
+}
+
+function makeBools(n) {
+	for (var i=0;i<=n;i++) this[i]=false;
+}
+
+function makeComment(n) {
+	for (var i=1;i<=n;i++) this[i]="";
+}
+
+function makeMinus(n) {
+	for (var i=1;i<=n;i++) this[i]=-1;
+}
+
+function Question() {
+	Question.frage ="";
+	Question.a ="";
+	Question.b ="";
+	Question.c ="";
+	Question.d ="";
+	Question.e ="";
+	Question.ok ="";
+	Question.kap = 0;
+	Question.pos = 0;
+	Question.antw = 0;
+	Question.x = false;
+	Question.y = false;
+	Question.w = false;
+	Question.m = false;
+	Question.err = 0;
+	Question.weak = 0;
+	Question.l =0;
+	Question.z=0;
+}
+
+var Version = "6.01";
+var Klasse = "ffw";
+
+var User = "";
+var Nickname = "";
+var Nickstart = "";
+var lastUser = "";
+var meineUser = new Array();
+var nUser = 0;
+var wissen = new Array();
+var kameraden = new Array();
+
+var Frage=1;
+var ErsteFrage = 1;
+var LetzteFrage = 1;
+var Lfd = 0;
+var nGemischt = 1;
+var tnFragen =  0;
+
+var Modus = 1;
+var a="a";
+var b="b";
+var c="c";
+var d="d";
+var e="e";
+var iO = 1;
+var Geladen=0;
+var Thema="";
+var LastKey="";
+var Fehler= 0;
+var Wiederholung = false;
+var Lauf = 0;
+var Laut = false;
+var Feedback = true;
+var Reihe = false;
+var Ordnung = false;
+var OffenLegen = false;
+var Zweifel = true;
+var Prozent = 50;
+var AlleFragen = false;
+var Automat = true;
+var AutoNr = 0;
+var nAuto = 15;
+var xAuto = nAuto;
+var Settings = "";
+var sep_0 = "|";
+var sep_1 = ":";
+var sep_2 = ",";
+var MischDatum = "-";
+var Cookie = true;
+var Unklar = 1;
+var CookieKlasse = Klasse+".alraft.de";
+var Korrekt = "";
+var Streifen = false;
+var Manuell = false;
+var StandardHeadline ="Feuerwehr-Fragebogen";
+var PrintNr = 0;
+var AutoNum = true;
+var Uhr = 0;
+var MilliSek = 0;
+var StartZeit = 0;
+var GrenzZeit = 7000;
+var TextZeit = 30;
+var Status =0;
+var Freiraum = 0;
+var NrFarbe = "black";
+var ShowNr = 0;
+var Anzahl =5;
+var InfoWindow = 1;
+var ToolWindow = 0;
+var FormWindow=0;
+var addFile = false;
+var Warten= 0;
+var Pause = 0;
+var AusgabeFenster;
+var ErfolgFenster;
+var Meister = false;
+var Sperre = false;
+var Loading = false;
+var AlleLaden = false;
+var nComments = 10;
+var Icons = new Array;
+Icons[0] = new Image(); Icons[0].src = "blank.gif";
+Icons[1] = new Image(); Icons[1].src = "richtig.gif";
+Icons[2] = new Image(); Icons[2].src = "korrekt.gif";
+Icons[3] = new Image(); Icons[3].src ="falsch.gif";
+
+var Kapitel = new Array ("ABC-Gefahrstoffe"
+                        ,"Atemschutz"
+                        ,"Zivilschutz"
+                        ,"BSD"
+                        ,"Brennen"
+                        ,"Fahrzeugkunde"
+                        ,"Ger&auml;te TH"
+                        ,"Katastrophenschutzes"
+                        ,"Hygiene"
+                        ,"Erste Hilfe"
+                        ,"L&ouml;scheinsatz"
+                        ,"L&ouml;schen"
+                        ,"Schlauchkunde"
+                        ,"Pers. Ausr&uuml;stung"
+                        ,"Phy. u. psy. Belastung"
+                        ,"Rechtsgrundlagen"
+                        ,"Rettung"
+                        ,"Rettungsger&auml;te"
+                        ,"Sonstige Ger&auml;te"
+                        ,"Sprechfunk"
+                        ,"TH"
+                        ,"UVV"
+                        ,"Verhalten bei Gefahr"
+                        ,"Wasserf&ouml;rderung"
+                        ,"Spezial_1"
+                        ,"Spezial_2"
+                        ,"Spezial_3"
+                        ,"Spezial_4"
+                        ,"Spezial_5"
+                        );
+var nKapitel = Kapitel.length;
+var weak = new Array;
+var Cookies = new Array;
+
+var ManAusw = new Array;
+var Zuf = new Array;
+var Zeiger = 0;
+var entwickler = false;
+
+var Antw = new makeArray(5);
+var meineFrage ="";
+var Mode = new makeArray(10);
+var Comment = new makeComment(10);
+Comment[1]="Pech gehabt! aber ...\nUebung macht den Meister.";
+Comment[2]="Schade, aber diese Antwort\nist leider falsch.";
+Comment[3]="Falsch getippt!\nDas war nicht richtig.";
+Comment[4]="Sorry, aber das kann ich\nnicht als richtig anerkennen.";
+Comment[5]="Falsch - Falsch - Falsch\nBitte noch mal nachdenken.";
+Comment[6]="Verdammt! ...\n\ndas sind aber auch schwere Fragen!";
+Comment[7]="Irren ist menschlich!\n\nWie waere es mit\n einer anderen Antwort.";
+Comment[8]="Bitte besser konzentrieren!\nDas war jedenfalls nicht richtig.";
+Comment[9]="Knapp vorbei ist auch daneben!\nEinfach noch mal probieren.";
+Comment[10]="Es ist noch kein Meister\nvoll Himmel gefallen.";
+
+var bt = new makeFragen(2000);
+var q = new makeFragen();
+
+var FfwFile =-1;
+var Vorhanden = new makeBools(29);
+var Urkunde = new makeBools(29);
+var ZeigerAnf = new makeArray(29);
+var ZeigerEnd = new makeArray(29);
+var AnzFragen = 15;
+var effFragen = 0;
+
+function AllesBereit() {
+	var antw = 0;
+	var steuer_frame = parent.Steuer;
+
+	with (steuer_frame) {
+		FuelleAntwort();
+		FuelleFragen();
+		q = t;
+	}
+
+	window.open("ffw_leer.htm","Steuer");
+	Unklar = 1;
+	if (Cookie) {
+		LeseCookie(FfwFile);
+	}
+	for (var i=1;i<=LetzteFrage;i++) {
+		q[i].kap = FfwFile;
+		q[i].pos = i;
+		q[i].l = q[i].frage.length + q[i].a.length+q[i].b.length;
+		antw = 5;
+		if (q[i].e==null) antw--; else q[i].l += q[i].e.length;
+		if (q[i].d==null) antw--; else q[i].l += q[i].d.length;
+		if (q[i].c==null) antw--; else q[i].l += q[i].c.length;
+		q[i].antw = antw;
+	}
+	if (addFile) {
+		addKapitel();
+		Modus=2;
+	} else {
+		Modus=1;
+		NeuStart();
+	}
+}
+
+function addKapitel() {
+	ZeigerAnf[FfwFile] = nGemischt;
+	for (var x=1;x<=LetzteFrage;x++) {
+		bt[nGemischt++] = q[x];
+	}
+	ZeigerEnd[FfwFile] = nGemischt;
+	Vorhanden[FfwFile]=true;
+	if (AlleLaden && FfwFile < nKapitel) {
+		FfwFile++;
+		while (Vorhanden[FfwFile] && FfwFile < nKapitel) {
+			FfwFile++;
+		}
+		if ( FfwFile <= nKapitel ) {
+			var datei = (FfwFile < 10) ? "k0"+FfwFile:"k"+FfwFile;
+			parent.Details.document.Umfang.elements[datei].checked=true;
+			Lade("ffw_"+datei+".htm");
+		} else {
+			addKapitel2();
+		}
+	} else {
+		addKapitel2();
+	}
+}
+
+function alleLaden(form) {
+	var i= 1;
+
+	while (Vorhanden[i] && i++ < nKapitel) {
+	}
+	if ( i <= nKapitel ) {
+		var datei = (i <10) ? "k0"+i:"k"+i;
+		addFile = true;
+		AlleLaden = true;
+		parent.Details.document.Umfang.elements[datei].checked=true;
+		Lade("ffw_"+datei+".htm");
+		form.Alle.blur();
+	}
+}
+
+function addKapitel2() {
+	AlleLaden = false;
+	addFile = false;
+	Ampel("ffw_grn.htm");
+	InfoMsg("<h2>Fragen mischen</h2>");
+	Loading = false;
+}
+
+function html_kopf(title,mode) {
+		var kopf ="";
+
+
+		kopf += "<html>\n<head>\n";
+		kopf += "<title>"+title+"</title>\n";
+		kopf += "<meta http-equiv='content-type' content='text/html; charset=ISO-8859-1'>\n";
+		kopf += "<link rel='stylesheet' type='text/css' href='ffw.css'>\n";
+		kopf += "</head>\n";
+		return kopf;
+}
+
+function akt_user() {
+	NaviMsg("Hier &uuml;bt "+Nickstart+"<br><b style='color:#008;'>"+Nickname+"</b>");
+}
+
+function NaviMsg(msg) {
+	var doc = parent.Navi;
+	with (doc.document) {
+		open();
+		writeln(html_kopf(""));
+		write("<body style='margin:5px 3px 0 0;'>"+msg+"</body></html>");
+		close();
+	}
+}
+
+function InfoMsg(msg) {
+	var doc = parent.Info;
+	with (doc.document) {
+		open();
+		writeln(html_kopf(""));
+		writeln("<body>");
+		writeln(msg);
+		writeln("</body></html>");
+		close();
+	}
+}
+
+function DetailMsg(msg) {
+	var doc = parent.Details;
+	with (doc.document) {
+		open();
+		writeln(html_kopf(""));
+		writeln("<body>");
+		writeln(msg);
+		writeln("</body></html>");
+		close();
+	}
+}
+
+function Ampel(datei) {
+	parent.Navi.location.href=datei;
+}
+
+
+function delKapitel(form,datei) {
+	var y =(datei.substring(1,3));
+	FfwFile = parseInt(y,10);
+	if (Vorhanden[FfwFile]) {
+		var i = ZeigerAnf[FfwFile] ;
+		var j = ZeigerEnd[FfwFile] ;
+		while ( j <= nGemischt) {
+			bt[i++] = bt[j++];
+		}
+		var diff = ZeigerEnd[FfwFile] - ZeigerAnf[FfwFile] ;
+		j = ZeigerEnd[FfwFile];
+		ZeigerAnf[FfwFile] = 0;
+		ZeigerEnd[FfwFile] = 0;
+		for ( var k=1;k<=nKapitel;k++) {
+			if (ZeigerAnf[k] >= j) {
+				ZeigerAnf[k] -=diff;
+				ZeigerEnd[k] -=diff;
+			}
+		}
+		Vorhanden[FfwFile]=false;
+		nGemischt -=diff;
+		LetzteFrage=nGemischt;
+		NaviMsg("Kapitel wurde<BR>entfernt");
+	}
+	Loading = false;
+	FfwFile = -1;
+}
+
+function clearKapitel() {
+	for (var Kap = 1; Kap <= Kapitel.length; Kap++) {
+		Vorhanden[Kap] = false;
+		ZeigerAnf[Kap] = 0;
+		ZeigerEnd[Kap] = 0;
+	}
+	bt = new makeFragen(500);
+	nGemischt 	= 1;
+	LetzteFrage = 1;
+	FfwFile = -1;
+}
+
+function NeuStart() {
+	var Zeugnis =new makeArray0(10);
+	var Note = 9;
+	Unklar=0;
+
+	for (var i=1;i<=LetzteFrage;i++) {
+
+		Note = weak[q[i].kap][q[i].pos];
+		q[i].weak = Note;
+		q[i].y = false;
+		if (23 == Note) { q[i].weak = 4; Note = 9; }
+	if (Note > 2) Unklar++;
+		Zeugnis[Note]++;
+	}
+	var Rest = nAuto;
+	var GrenzNote=9;
+	while (Rest > 0 && GrenzNote > 0) {
+		Rest -= Zeugnis[GrenzNote--];
+	}
+	if (Rest < - nAuto) GrenzNote++;
+	for (var i=1;i<=LetzteFrage;i++) {
+		Note = weak[q[i].kap][q[i].pos];
+
+	}
+
+	if (!AlleFragen && !Automat && Unklar == 0 && Modus==1) {
+		var doc = parent.Details;
+		with (doc.document) {
+			open();
+			writeln(html_kopf("Wissensstand"));
+			writeln("<body><p>Du &uuml;bst im Moment im Modus <b>Nur Problemfragen</b> (<img src='nur.gif' width='26' height='20' alt='' style='vertical-align:text-bottom'>). Dies ist Dein Ausbildungsstand den Du im Kapitel <b>"+Kapitel[FfwFile-1]+"</b> inzwischen erreicht hast:</p>\n<p style='margin:0 20%'>");
+			var Erfolg = Lernerfolg(doc,FfwFile);
+			writeln("</p><p>Das sieht doch schon gut aus!</p><p>In diesem Kapitel stehst Du nun bei allen Fragen auf der Note <b>Gut oder besser</b>. Du solltest in den <a href='javascript:Einstellungen()'>Einstellungen</a> den Modus auf <b>Automatisch</b> (<img src='alle.gif' width='26' height='20' alt='' style='vertical-align:text-bottom'>) stellen oder ein anderes Kapitel zum &Uuml;ben ausw&auml;hlen.</p>\n</body></html>");
+			close();
+		}
+		InfoMsg("<h3>Hallo "+Nickname+" !</h3>");
+		NaviMsg("");
+	}
+	if (AlleFragen || Automat || Unklar > 0 || Modus==2 ) {
+		for (var i=1;i<=LetzteFrage;i++) {
+			q[i].err = -1;
+			q[i].x = false;
+			q[i].m = false;
+			q[i].z = 0;
+			if ( Modus== 1 && !AlleFragen && !Automat ) {
+				if (q[i].weak <=2) { q[i].x=true; q[i].err =-2; }
+			}
+		}
+
+		if (Automat && Modus ==1) {
+			Zuf = AutoFragen(LetzteFrage);
+			AutoNr = 0;
+			xAuto = Math.min(nAuto,LetzteFrage);
+			for (var i=xAuto;i<LetzteFrage;i++) {
+				q[Zuf[i][1]].x = true;
+				q[Zuf[i][1]].err = -2;
+			}
+		}
+		if (Automat && Modus ==2) {
+			xAuto = LetzteFrage;
+		}
+
+		Wiederholung=false;
+		Lauf = 1;
+		Lfd=1;
+		Freiraum = (AlleFragen || Automat || Modus==2) ? LetzteFrage : Unklar;
+		InfoMsg("<h2 class='kapitel'>Kapitel: <span class='rot'>"+Thema+"</span></h2>");
+		window.open("ffw_navi.htm","Navi");
+		MilliSek = 0;
+		Uhr= new Date();
+		Test(Lfd);
+	}
+}
+
+function StelleFrage(Richtung) {
+	if (Lfd==0) {
+		alert("\nDu musst zuerst\nein Kapitel auswaehlen");
+	} else {
+		if (Richtung==0) {
+			var Neu = eval(prompt("Nummer der Frage eingeben "+ErsteFrage+"-"+LetzteFrage,Lfd));
+			if (Neu!=null) Lfd = Neu;
+		} else {
+			Lfd +=Richtung;
+		}
+		if (0 < Freiraum) Test(Lfd); else Statistik();
+	}
+}
+
+function Loop() {
+	if (AlleFragen || Automat || Unklar > 0 || Modus==2) {
+		Wiederholung=true;
+		AutoNr = 0;
+		Lauf++;
+		Freiraum = (AlleFragen || Automat || Modus==2) ? LetzteFrage : Unklar;
+		for (var i=1;i<=LetzteFrage;i++) {
+			q[i].w = false;
+			q[i].y = false;
+			if (q[i].err != 0 && q[i].err != -2) {q[i].err = -1; q[i].x=false; q[i].z =0; q[i].m =false; q[i].w = true; }
+		}
+		Lfd = 1;
+		Uhr= new Date();
+		window.open("ffw_navi2.htm","Navi");
+		Test(Lfd);
+	} else {
+		alert("Herzlichen Gl&uuml;ckwunsch!\n\nIn diesem Kapitel bist Du perfekt.\nW&auml;hle bitte ein anderes Kapitel aus");
+	}
+}
+
+function AutoFragen(nFragen) {
+	var s,p,n = 0;
+	var Zufall = new Array();
+	var Mischen = new Array();
+
+	for (var i=1; i<=nFragen; i++) {
+		s = q[i].weak+1;
+		p = 1;
+		for (var j=9;j>=s;j--) p *= Math.random();
+		if (s==0) p *= Math.random();
+		Zufall[n++] = [p,i];
+	}
+	Zufall.sort(Desc);
+	return Zufall;
+
+//rem 	alert(Zufall);
+//rem 	for (var i=0; i<nFragen; i++) {
+//rem 		Mischen[i] = [Math.random(),Zufall[i][1]];
+//rem 	}
+//rem 	Mischen.sort(Desc);
+//rem 	return Mischen;
+}
+
+function Test(Nr) {
+	Fehler = 0;
+	LastKey ="";
+	var i=0;
+	NrFarbe = "black";
+
+	if (Nr>LetzteFrage) Nr = ErsteFrage;
+	if (Nr<ErsteFrage ) Nr = LetzteFrage;
+
+	if ( !Reihe && !Wiederholung && !Automat) {
+		Nr = Math.floor((Math.random()*LetzteFrage)%LetzteFrage)+1;
+
+		while (q[Nr].x) {
+			Nr = (Nr<LetzteFrage) ? ++Nr: 1;
+		}
+		NrFarbe = "blau";
+		Freiraum--;
+		Lfd = (Lfd < 1) ? 1:Lfd;
+	} else {
+		if (Automat && !Wiederholung && Modus==2) {
+			AutoNr = Lfd;
+		}
+		if (Automat && !Wiederholung && Modus==1) {
+			Nr = Zuf[AutoNr++][1];
+			Lfd  = AutoNr;
+			NrFarbe = "blau";
+		} else {
+			if (Wiederholung){
+				while (Nr <= LetzteFrage && q[Nr].x) {
+					Nr++;
+				}
+//rem 				alert("Nr: "+Nr+"\nLetzteFrage: "+LetzteFrage);
+			}
+			Lfd=Nr;
+		}
+	}
+
+	if (((!Automat || Wiederholung)&& Nr<=LetzteFrage) || (Automat && !Wiederholung && AutoNr <=  xAuto) ) {
+
+		Anzahl = q[Nr].antw;
+
+		Antw[1] = q[Nr].a;
+		Antw[2] = q[Nr].b;
+		Antw[3] = q[Nr].c;
+		Antw[4] = q[Nr].d;
+		Antw[5] = q[Nr].e;
+		Korrekt = q[Nr].ok;
+
+		var temp ="";
+		for (i=1;i<=Anzahl;i++) {
+			temp = unescape("%6"+i);
+			if (temp==Korrekt) iO = i;
+		}
+
+		if (!Ordnung) ZufallAbc();
+
+		Frage=Nr;
+		meineFrage = q[Nr].frage;
+		ShowNr = (!Automat && Reihe || Wiederholung) ? Nr : Lfd;
+		if (!AlleFragen && !Automat && q[Nr].weak <= 2 && Modus==1) {
+			KennIch(Nr);
+		} else {
+			Anzeige(Nr,OffenLegen);
+		}
+	} else {
+		Statistik();
+	}
+}
+
+function KennIch(Nr) {
+	if (Lfd <LetzteFrage) { Lfd++; Test(Lfd); } else { Statistik(); }
+}
+
+function ZufallAbc() {
+	var i= 0;
+	var Position = 0;
+	var iO2 = 0;
+	var Zeiger=new makeArray(Anzahl);
+	var Inhalt=new makeArray(Anzahl);
+	for (i=1;i<=Anzahl;i++) Zeiger[i]=0;
+	for (i=1;i<=Anzahl;i++) {
+		Position = Math.floor((Math.random()*Anzahl)%Anzahl)+1;
+		while (Zeiger[Position]>0) Position = (Position<Anzahl) ? ++Position : 1;
+		Zeiger[Position]=i;
+		if (i==iO) {
+			Korrekt = unescape("%6"+Position);
+			iO2 = Position;
+		}
+		Inhalt[Position] = Antw[i];
+
+	}
+	Antw=Inhalt;
+	iO = iO2;
+}
+
+function Anzeige(Nr,Offen) {
+	var temp = "";
+	var tr_class = "";
+	var on_click = "";
+	var doc = parent.Details;
+
+	var Jetzt = new Date();
+	StartZeit = Jetzt.getTime();
+
+	with(doc.document) {
+		open();
+
+
+
+
+		writeln(html_kopf("Statistik") + "<body>\n");
+//rem  		write("Kapitel-Nr.: = "+q[Nr].kap + " Frage-Nr.: = "+q[Nr].pos+ " weak: = "+q[Nr].weak+ " err: = "+q[Nr].err+ " x: = "+q[Nr].x+ " m: = "+q[Nr].m+ " Zeit: = "+q[Nr].z+"<BR>\n");
+		if (Modus==2 && (Wiederholung || OffenLegen )) writeln("<span class='hgGrau'>"+Kapitel[q[Nr].kap-1]+"</span><span class='hgMetall'>Nr: "+(q[Nr].pos)+"</span><br>");
+		writeln("<form name='Antworten'>");
+		write("<div class='gross'><table class='frage'><tr valign='top'><td class='"+NrFarbe+"'>"+ShowNr+".</td><td>");
+		write(meineFrage + "</td></tr></table></div>\n");
+		write("<TABLE cellpadding='7' cellspacing='0'>");
+		for (var i=1;i<=Anzahl;i++) {
+			temp = unescape("%6"+i);
+			tr_class = "";
+			on_click = "";
+			if (Offen && i==iO) {
+				tr_class = " class='offen'";
+				on_click = " onClick='parent.Index.Antwort2(\""+temp+"\");'";
+			} else if (!Offen) {
+				on_click = " onClick='parent.Index.Antwort(\""+temp+"\");'";
+			}
+
+			write("<TR VALIGN='TOP'"+tr_class+">");
+			write("<TD><Input class='antwort' Type='Button'  Name='"+temp+"' value='"+temp+"'"+on_click+">");
+			write("</TD><TD>");
+			write("<p class='antwort'"+ on_click+">"+Antw[i]+"</p>\n");
+			writeln("</TD></TR>");
+		}
+
+		writeln("</table>");
+		if (!OffenLegen) {
+			write("<div style='text-align: right; margin-right:2em;'><input type='checkbox' name='Merken' "+ ((q[Nr].m) ? " checked ":"") + " onClick='parent.Index.q["+Nr+"].m = this.checked'>Frage&nbsp;merken</div>");
+		}
+		if (entwickler && 0 < nUser) {
+			for (var i = 0;i<nUser;i++) {
+				writeln(kameraden[i]+" = "+ wissen[i][q[Nr].kap][q[Nr].pos] +"<BR>");
+			}
+		}
+		write("</Form></BODY></HTML>");
+		close();
+	}
+
+	var Jetzt = new Date();
+	StartZeit = Jetzt.getTime();
+	Status = 1;
+	InfoWindow = 0;
+	ToolWindow = 0;
+	FormWindow = 0;
+}
+
+function Statistik() {
+	var doc = parent.Details;
+	var richtig = 0;
+	var falsch = 0;
+	var skip = 0;
+	var unsicher = 0;
+	var gesamt =0;
+	var min = 1000000;
+	var max = 0;
+	var kumZeit = 0;
+	var effZeit =0;
+	var kumText = 0;
+	var warum = "";
+
+	var Jetzt = new Date();
+	MilliSek += Jetzt.getTime() - Uhr.getTime();
+
+	with (doc.document) {
+		open();
+		writeln("<HTML><HEAD>");
+		writeln("<link rel='stylesheet' type='text/css' href='ffw.css'>");
+		writeln("</HEAD>");
+	}
+
+	for (var i=1;i<=LetzteFrage;i++) {
+		if (q[i].err >= 0) {
+			min = Math.min(q[i].z,min);
+			max = Math.max(q[i].z,max);
+			effZeit += q[i].z;
+			kumZeit += q[i].z;
+			kumText += q[i].l;
+			gesamt++;
+		}
+	}
+
+	if (Lauf==1 && gesamt > 1) {
+		GrenzZeit = (kumZeit-max)/(gesamt-1)/2 * (1+Prozent/100);
+		TextZeit = kumZeit/2/kumText * (1 + Prozent/100);
+		GrenzZeit = Math.min(GrenzZeit,40000);
+//rem 		alert("KumZeit: "+kumZeit+"\nkumText: "+kumText+"\nTextZeit: "+TextZeit+"\nGrenzZeit: "+GrenzZeit);
+	}
+
+	for (var i=1;i<=LetzteFrage;i++) {
+		if (q[i].err < 0) {
+			if (q[i].err == -1) skip++;
+		} else {
+			if (q[i].err ==0) {
+				richtig++;
+				if ((Zweifel && (q[i].z-q[i].l*TextZeit) > GrenzZeit ) || q[i].m ) {
+					unsicher++;
+				}
+			} else {
+			   falsch++;
+			}
+		}
+	}
+
+	with (doc.document) {
+		writeln("<body>\n");
+		if (gesamt > 0) {
+
+			var Zeitbedarf = ""+Math.round(effZeit/gesamt/100)/10;
+			if (Zeitbedarf.charAt(0)==".") Zeitbedarf = "0"+Zeitbedarf;
+			Zeitbedarf = Zeitbedarf.bold();
+			var Ges15 = Math.round(effZeit/gesamt*15/1000);
+			var Sek15 = Ges15 % 60;
+			var Min15 = (Ges15 - Sek15) /60;
+			var Farbe = "BLACK";
+			if (Min15 < 2) Farbe = "DarkGreen";
+			if (Min15 > 5) Farbe = "Red";
+     		if (Min15 > 9) Farbe = "#ff00ff";
+
+			var Anrede = ("" < Nickname) ? "<span class='gruen'>"+Nickname+"</span>, ":"";
+			var Hinweis = (Wiederholung) ? "diesmal" : "bravo, es";
+			var Erfolg = "";
+			var Geschafft = "Geschafft";
+
+			if (falsch == 0 && skip == 0) {
+				Erfolg = "und <b>"+Hinweis+" war alles richtig!</b>";
+				if (!Wiederholung) {
+					if (120 > Ges15) Geschafft = "Saubere Arbeit";
+					if (90 > Ges15) Geschafft = "Sehr gute Zeit";
+					if (75 > Ges15) Geschafft = "Ausgezeichnete Zeit";
+					if (60 > Ges15) Geschafft = "Super Zeit";
+					if (45 > Ges15) Geschafft = "Unglaubliche Zeit";
+				}
+			} else {
+				if (falsch > 0) {
+					Erfolg = "aber es gab noch <b>"+falsch+" Fehler</b>";
+				} else {
+					Erfolg = "und es gab keine Fehler";
+				}
+			}
+
+			writeln("<p style='margin-bottom: 0.5em;'><b>"+Geschafft+":</b> "+Anrede+"Du hast das Ende erreicht "+Erfolg+"</p>\n");
+
+
+			var Fuenfzehn = "<B>15-Fragen</B>-Zeit: <span style='color:"+Farbe+"; background:transparent;'><b>";
+			if (Min15 > 0) Fuenfzehn += Min15 + " Min. ";
+			if (Sek15 > 0) Fuenfzehn += Sek15 + " Sek.";
+			Fuenfzehn += "</b></span>";
+
+			writeln("<TABLE Border='1'  width='100%' CELLSPACING='0' BGCOLOR='WHITE'>");
+			writeln("<TR BGCOLOR='#cccccc'><TH align='left'>&nbsp;Ergebnis</TH><TH>Fragen</TH><TH>Prozent</TH><TH>&nbsp; &nbsp;</TH><TH align='left'>Zeitbedarf</TH></TR>");
+			writeln("<TR><TD>&nbsp;Richtig</TD><TD align='right'>"+richtig+" </TD><TD align='right'>"+Math.round(richtig*100/gesamt)+"% </TD><TD>&nbsp;</TD><TD>Mittelwert: "+Zeitbedarf+" Sekunden/Frage</TD></TR>");
+			writeln("<TR><TD>&nbsp;Falsch</TD><TD align='right'>"+falsch+" </TD><TD align='right'>"+Math.round(falsch*100/gesamt)+"% </TD><TD>&nbsp;</TD><TD>Minimumzeit: "+(Math.round(min/100)/10)+" Sek.</TD></TR>");
+			writeln("<TR><TD>&nbsp;Gesamt</TD><TD align='right'>"+gesamt+ " </TD><TD align='right'>100% </TD><TD>&nbsp;</TD><TD>Maximumzeit: "+(Math.round(max/100)/10)+" Sek.</TD></TR>");
+			writeln("<TR><TD>&nbsp;&Uuml;bersprungen </TD><TD align='right'>"+skip+" </TD><TD align='right'>"+Math.round(skip*100/LetzteFrage)+"% </TD><TD>&nbsp;</TD><TD>"+Fuenfzehn+"</TD></TR>\n</TABLE>");
+		} else {
+			if (OffenLegen) {
+				writeln("<p>"+Nickname+", das war's! Wir haben "+gesamt+" Fragen gesehen.");
+			} else {
+				writeln("<p>Du hast <b>alle Fragen &uuml;bersprungen</b>!</p>");
+				if (1 == Modus) writeln("<p>Aber vielleicht wolltest Du ja direkt in Deine Problemliste schauen? Dann klicke rechts oben auf das rote Kreuz.</p>\n");
+			}
+		}
+
+		writeln("\n<FORM Name='Nochmal'>");
+		if (falsch > 0) {
+			writeln("<INPUT TYPE='Button' Name='Repeat' Value='Probleme wiederholen' onClick='parent.Index.Loop();'>");
+		} else {
+			if (unsicher > 0) writeln("<INPUT TYPE='Button' Name='Repeat' Value='Unsichere wiederholen' onClick='parent.Index.Loop();'>");
+		}
+		writeln("<INPUT TYPE='Button' Name='Schleife' Value='Kapitel wiederholen' onClick='parent.Index.NeuStart();'>");
+		if (Modus==2) {
+			writeln("<P><INPUT TYPE='Button' Name='Mischen' Value='Fragen neu mischen' onClick='parent.Index.TeilFragen(this.form);'>");
+			writeln("&nbsp; Anz. Fragen:&nbsp;<Select Name='Anzahl'><Option VALUE='7'>7<Option VALUE='10'>10<Option VALUE='15'>15<Option VALUE='20'>20<Option VALUE='25'>25<Option VALUE='30'>30<Option VALUE='50'>50</SELECT>");
+		}
+		writeln("</FORM>");
+
+		if (gesamt > 0 ) {
+//rem 			writeln("Textzeit: "+Math.round(TextZeit*10)/10+" Grenzeit: "+ Math.round(GrenzZeit));
+			if (falsch || unsicher) { writeln("<TABLE Border='1' CELLSPACING='0' bgcolor='white'><TR BGCOLOR='#cccccc'><TH>Nr.</TH><TH align='left'>&nbsp;Problem</TH><TH align='left'>Frage</TH></TR>\n"); }
+			for (var i=1;i<=LetzteFrage;i++) {
+//rem 				writeln("<TR><TD>"+q[i].z+"</TD><TD>"+q[i].l+"</TD><TD>TextBonus: "+Math.round(q[i].l*TextZeit)+" Gewertete Zeit: "+ Math.round(q[i].z-q[i].l*TextZeit) +"</TD></TR>" );
+				meineFrage = q[i].frage;
+				var rot = meineFrage.replace(/\bnicht\b/gi,"<span class='rot'>nicht</span>");
+
+				if (q[i].err == 1)  write("<TR><TD align='right'>"+i+"</TD><TD class='rot'>falsch</TD><TD>" + rot +"</TD></TR>\n");
+				if (q[i].err >= 2)  write("<TR><TD align='right'>"+i+"</TD><TD class='pink'>"+q[i].err+" x falsch</TD><TD>"+ rot +"</TD></TR>\n");
+				if (q[i].err ==0) {
+					if (q[i].m) {
+						write("<TR><TD>"+i+"</TD><TD>gemerkt</TD><TD>"+meineFrage+"</TD></TR>\n");
+					} else {
+						if (Zweifel && (q[i].z - q[i].l * TextZeit) > GrenzZeit ) {
+							warum = ((q[i].z < 5000)  ? "langsam":"unsicher") + "&nbsp;";
+							writeln("<TR><TD align='right'>"+i+"</TD><TD>"+warum+Math.round(q[i].z/100)/10+"&nbsp;Sek.</TD><TD>"+meineFrage+"</TD></TR>");
+						}
+					}
+				}
+			}
+			if (falsch || unsicher) { writeln("</TABLE>"); }
+			if (skip && (Automat || AlleFragen)) writeln("<p>Du hast <b>"+skip+"</b> Fragen </b>&uuml;bersprungen!</b></p>");
+
+			if (!OffenLegen) {
+				Unklar = 0;
+				for (var i=1;i<=LetzteFrage;i++) {
+					if (q[i].err ==1) { q[i].weak += Math.max(3-Lauf,0); 	if (q[i].weak < 4 ) q[i].weak = 4; }
+					if (q[i].err >=2) { q[i].weak += Math.max(4-Lauf,0); 	if (q[i].weak < 5 ) q[i].weak = 5; }
+					if (q[i].err ==0) {
+						if (q[i].m) {
+							if (!Wiederholung) q[i].weak++;
+							q[i].err = -1;
+						} else {
+							if (Zweifel && (q[i].z-q[i].l*TextZeit) > GrenzZeit ) {
+								if (q[i].z > 5000 && !Wiederholung) q[i].weak++;
+								q[i].err = -1;
+							} else {
+								if ( q[i].weak >0 ) {
+                       		                   	if (!Wiederholung) {
+										q[i].weak--;
+									} else {
+										if ( q[i].w && Lauf ==2 )  {
+
+											q[i].weak--;
+										}
+									}
+								}
+							}
+						}
+					}
+					if (q[i].weak > 2) Unklar++;
+					if (q[i].weak > 9) q[i].weak = 9;
+				}
+			}
+		}
+
+		writeln("</BODY></HTML>");
+		close();
+	}
+
+	if (Status!=2) {
+		if (Cookie && FfwFile != 0 && gesamt > 0) {
+			for (var i=1; i<=LetzteFrage; i++) {
+
+				if (q[i].y) weak[q[i].kap][q[i].pos] = q[i].weak;
+			}
+			if (Modus==1) {
+				weak[FfwFile][0] = Unklar;
+				var Noten = "";
+				var Note = 23;
+				var Code = "";
+				var alternative = "";
+				for (var i=1; i<=LetzteFrage; i++) {
+
+					Note = weak[FfwFile][i];
+					if (isNaN(Note)) Note = 23;
+					Code = 97+Note;
+					Noten += unescape("%"+Code.toString(16));
+					Code = 10+Note;
+					alternative += Code.toString(36);
+				}
+				if (entwickler && Noten != alternative)alert (Noten+"\n"+alternative);
+     	 		setCookie(FfwFile,Noten);
+			} else {
+				setCookieAll();
+			}
+		}
+	}
+
+	if (Modus==2) {
+		var j = false;
+		with(doc.document) {
+			for(var i=0; i < Nochmal.Anzahl.length; i++) {
+				if( Nochmal.Anzahl.options[i].value == AnzFragen) {
+					Nochmal.Anzahl.options[i].selected=true;
+					j = true;
+				}
+			}
+			if ( ! j ) Nochmal.Anzahl.options[2].selected = true;
+		}
+	}
+
+//rem 	Balken anzeigen
+	if (Modus==1 && FfwFile>0) {
+		doc = parent.Navi;
+		with (doc.document) {
+			open();
+			writeln(html_kopf("Wissensstand"));
+			write("<body style='margin:0; padding:0;'>Wissensstand<BR>");
+			var Erfolg = Lernerfolg(doc,FfwFile);
+			write("<div>"+Nickname+"</div></body></html>");
+			close();
+		}
+		if (Erfolg<0 && !Urkunde[FfwFile]) {
+			if (!Meister) EineUrkunde(FfwFile);
+			Urkunde[FfwFile] = true;
+		}
+	} else {
+		akt_user();
+	}
+
+	Status =2;
+	InfoWindow = 0;
+	ToolWindow = 0;
+	FormWindow =0;
+}
+
+function Antwort2(x) {
+	if (Freiraum ==0) {
+		Statistik();
+	} else {
+		if (Lfd <LetzteFrage) { Lfd++; Test(Lfd); } else { Statistik(); }
+	}
+}
+
+function Antwort(x) {
+	var Jetzt = new Date();
+	var Dauer = Jetzt.getTime() - StartZeit;
+	if (200 < Dauer) {
+		q[Frage].z = Dauer;
+
+		var badanswer = "";
+
+		q[Frage].x =true;
+		q[Frage].y =true;
+		if (x==Korrekt) {
+			if (Laut || Wiederholung) {
+				Anzeige(Frage,true);
+			}
+			if (q[Frage].err == -1) q[Frage].err =0;
+		} else {
+			Fehler++;
+			switch(x) {
+				case "a": badanswer = Antw[1]; break;
+				case "b": badanswer = Antw[2]; break;
+				case "c": badanswer = Antw[3]; break;
+				case "d": badanswer = Antw[4]; break;
+				case "e": badanswer = Antw[5]; break;
+			}
+			if (q[Frage].err == -1) q[Frage].err =1; else q[Frage].err +=1;
+			if (Feedback || Laut || Wiederholung ) {
+				if (x==LastKey) {
+					alert("schon wieder auf "+x+"!\nDas war jetzt kein Pech\nsondern Dummheit!");
+				} else {
+					LastKey=x;
+					if (Fehler==1) {
+						if (badanswer.length < 30 && badanswer.indexOf("&") <0) alert(badanswer+"\nist leider falsch");
+						else alert(Comment[Math.floor(Math.random()*nComments)%10+1]);
+					} else {
+						if (badanswer.length < 30 && badanswer.indexOf("&") <0) alert("Sorry, "+badanswer+"\nist leider auch falsch");
+						else alert("Das ist aber heute\nnicht unser Tag - oder ?");
+					}
+				}
+			}
+		}
+
+		if (!Laut && !Wiederholung) {
+			if (x==Korrekt || !Feedback ) {
+				if (Freiraum ==0) {
+					Statistik();
+				} else {
+					if (Lfd <LetzteFrage) { Lfd++; Test(Lfd); } else { Statistik(); }
+				}
+			}
+		}
+	}
+}
+
+function DruckeNr(Nr,istNr,Drucker) {
+	Anzahl = q[Nr].antw;
+	var temp;
+	var bild= "";
+	var vorz ="";
+
+	meineFrage = q[Nr].frage;
+
+	Antw[1] = q[Nr].a;
+	Antw[2] = q[Nr].b;
+	Antw[3] = q[Nr].c;
+	Antw[4] = q[Nr].d;
+	Antw[5] = q[Nr].e;
+	Korrekt = q[Nr].ok;
+
+	q[Nr].weak = weak[q[Nr].kap][q[Nr].pos];
+	if (q[Nr].weak == 23) q[Nr].weak == 4;
+	q[Nr].w = true;
+
+	for (var i=1;i<=Anzahl;i++) {
+		temp = unescape("%6"+i);
+		if (temp==Korrekt) iO = i;
+	}
+	ZufallAbc();
+
+	AusgabeFenster.document.write("<TR valign=top><TD><FONT SIZE=+1>"+istNr+".</FONT></TD>");
+	if (!Drucker) {
+		var BigFrage = meineFrage;
+		BigFrage.toUpperCase;
+		if (BigFrage.indexOf("<IMG ",0) > -1) bild = "-";
+	}
+	AusgabeFenster.document.write("<TD colspan=3><FONT SIZE=+1>"+ meineFrage + "</FONT></TD>");
+	if (Drucker && Streifen) AusgabeFenster.document.write("<TD align=center>:</TD><TD>&nbsp;</TD>");
+	AusgabeFenster.document.writeln("</TR>");
+	for (i=1;i<=Anzahl;i++) {
+		temp = unescape("%6"+i);
+		AusgabeFenster.document.write("<TR valign=top><TD>&nbsp;</TD><TD>"+temp+")&nbsp;</TD><TD>"+Antw[i]+"</TD><TD>");
+		if (Drucker) {
+			AusgabeFenster.document.write(	"<img src='quadrat.gif' width=16 height=16>");
+		} else {
+			vorz = (unescape("%6"+i)==Korrekt) ? "+" : "-";
+
+			AusgabeFenster.document.write("<input type=checkbox name='"+bild+Nr+Korrekt+"' value=''><img src='blank.gif' width=65 height=16 alt=''>");
+		}
+		if (Drucker && Streifen) {
+			AusgabeFenster.document.write("</TD><TD align=center>:</TD><TD align=center>");
+			if (unescape("%6"+i)==Korrekt) AusgabeFenster.document.write(istNr ); else AusgabeFenster.document.write("-");
+			AusgabeFenster.document.write("");
+		}
+		AusgabeFenster.document.writeln("</TD></TR>");
+	}
+
+	AusgabeFenster.document.write("<TR><TD colspan=4>&nbsp;</TD>");
+	if (Drucker && Streifen) {
+	AusgabeFenster.document.write("<TD align=center>:</TD><TD>&nbsp;</TD></TR>");
+	} else {
+	AusgabeFenster.document.writeln("</TR>"); }
+}
+
+function Ausdruck(Drucker) {
+	var Gefragt = new makeBools(nGemischt);
+	var ok = false;
+	var Breite = Math.min(screen.width,760)-10;
+	var idNr = "";
+	var Headline = "";
+
+	if (Drucker) PrintNr++;
+	if (Drucker && !AutoNum)    PrintNr = prompt("Bitte gebe eine Identifikation-Nr (ID-Nr)\nfuer den jetzt zu erstellenden Ausdruck ein.",PrintNr);
+	if (parent.Details.document.Umfang.Headline.value>"") Headline = parent.Details.document.Umfang.Headline.value; else Headline=StandardHeadline;
+	if (AusgabeFenster) if (!AusgabeFenster.closed) AusgabeFenster.close();
+	if (Drucker) {
+		AusgabeFenster = open("","Fragebogen","toolbar=yes,menubar=yes,scrollbars=yes,resizable=yes,width="+Breite+",height="+eval(screen.height-150));
+		idNr = " Id-Nr.: " +PrintNr;
+	} else {
+		AusgabeFenster = open("","Fragebogen","toolbar=no,menubar=no,scrollbars=yes,resizable=yes,width="+Breite+",height="+eval(screen.height-100));
+	}
+	if (AusgabeFenster) {
+		AusgabeFenster.moveTo(screen.width-Breite-10,0);
+		with (AusgabeFenster.document) {
+			writeln("<HTML><HEAD><Title>Feuerwehr Fragebogen"+idNr+"</Title></HEAD>");
+			writeln("<BODY bgcolor='ffffff'>");
+			if (!Drucker) { writeln("<form>"); }
+
+			writeln("<TABLE BGCOLOR='#ffffff' CELLPADDING=1 CELLSPACING=0 WIDTH=100% border=0>");
+			if (Drucker) {
+				write("<TR valign=top><TD colspan=4><CENTER><Font Size=6><B>"+Headline+"</B></FONT>&nbsp;&nbsp;&nbsp;&nbsp;");
+				write("Id-Nr.:&nbsp;"+PrintNr+"</Center></TD>");
+				if (Streifen)	writeln("</TD><TD><img src='schere.jpg' width=25 height=46 hspace=3></TD><TD align=center>&nbsp;Id-Nr.<BR>"+PrintNr+"</TD>");
+				writeln("</TR><TR><TD>&nbsp;</TD><TD>&nbsp;</TD><TD><img src='pixel.gif' width=530 height=1></TD><TD>&nbsp;</TD></TR>");
+			} else {
+				writeln("<H1><A Name='Anfang'>Online-Fragebogen-Simulation</A></H1>");
+				writeln("Markiere die richtigen Antworten und klicke dann ganz unten auf der Seite auf <b>[Fragebogen abgeben]</b>.<HR>");
+			}
+		}
+
+		for (var istNr=1;istNr<effFragen+1;istNr++) {
+
+			ok = false;
+			while (!ok) {
+				var Zufall = Math.floor(Math.random()*(effFragen))+1;
+				if (Zufall > effFragen) Zufall--;
+				ok = !Gefragt[Zufall];
+			}
+			Gefragt[Zufall] = true;
+
+			DruckeNr(Zufall,istNr,Drucker);
+		}
+
+		with (AusgabeFenster.document) {
+			write("</TABLE>");
+			if (Drucker) {
+				writeln("<small>&copy;2008 HLFS + M.Altenhein Version "+Version+" http:/www.alraft.de/altenhein/fragebogen/ nur f&uuml;r den pers&ouml;nlichen Gebrauch</small>");
+			} else {
+				writeln("<HR><INPUT NAME='Auswerten' TYPE='Button' VALUE='Fragebogen abgeben' onClick='opener.parent.Index.CheckAusdruck(this.form);'>");
+				writeln("<A Name='unten'>&nbsp;</A> <INPUT NAME='Neustart' TYPE='Button' value='Neustart' onClick='opener.parent.Index.ClearAusdruck(this.form);'>");
+				writeln("&nbsp; <INPUT NAME='Abbruch' TYPE='Button' value='Fenster schliessen' onClick='window.self.close();'>");
+				writeln("&nbsp; </form>");
+				writeln("<small>&copy 2008 HLFS + M.Altenhein</small>");
+				Sperre = false;
+			}
+			write("</BODY></HTML>");
+			close();
+		}
+		AusgabeFenster.focus();
+		Status = 0;
+		Uhr = new Date();
+	} else {
+		BrowserProbleme();
+	}
+}
+
+function CheckAusdruck(form) {
+	var sFehler = 0;
+	var Fehler = 0;
+	var i=0;
+	var j=0;
+	var k=0;
+	var d=0;
+	var nAntw = 0;
+	var Nr = 0;
+	var BigFrage = "";
+	var temp = "";
+	var Jetzt = 0;
+	var Dauer = 0;
+	var Minuten = 0;
+	var Sekunden = 0;
+	var Zeit = "";
+
+	if (Sperre) {
+		AusgabeFenster.alert ("Klicke zuerst auf Neustart");
+	} else {
+		Jetzt = new Date();
+		Lauf++;
+		for ( i=0;i<effFragen;i++) {
+			Fehler =0;
+			temp = form.elements[k].name;
+			var l = temp.length-1;
+			Nr = eval(temp.substr(0,l));
+			if (Nr< 0) {
+				d++;
+				Nr = -Nr;
+			}
+			Korrekt = temp.substr(l,1);
+			nAntw = q[Nr].antw;
+//rem 			BigFrage = q[Nr].frage;
+//rem 			BigFrage.toUpperCase;
+//rem 			if (BigFrage.indexOf("<IMG ",0) > 0) d++;
+
+			for ( j = 0;j<nAntw;j++) {
+				temp = unescape("%6"+(j+1));
+				if (form.elements[k+j].checked) {
+					if (temp== Korrekt) {
+						AusgabeFenster.document.images[k+j+d].src = Icons[1].src;
+					} else {
+						AusgabeFenster.document.images[k+j+d].src = Icons[3].src;
+						Fehler++;
+					}
+				} else {
+					if (temp == Korrekt) {
+						AusgabeFenster.document.images[k+j+d].src = Icons[2].src;
+						Fehler++;
+					}
+				}
+			}
+			if (q[Nr].weak == 23) q[Nr].weak = 4;
+			if (Fehler>0) {
+				sFehler++;
+				q[Nr].weak += Math.min(Math.max(3-Lauf,0),9);
+				if (q[Nr].weak < 4 ) q[Nr].weak = 4;
+				q[Nr].w = true;
+			} else {
+				if (Lauf < 3 && q[Nr].weak > 0 &&q[Nr].w) {
+					q[Nr].weak--;
+				}
+				q[Nr].w = false;
+			}
+			k += nAntw;
+		}
+		var Ergebnis = (sFehler==0) ? "Prima, ": "";
+		Ergebnis += ""+sFehler+ " Fehler";
+		form.elements.Auswerten.value = Ergebnis;
+		Sperre = true;
+		Dauer = Jetzt.getTime() - Uhr.getTime();
+		Dauer /= 1000;
+		Minuten = Math.floor(Dauer/60);
+		Sekunden = Math.floor(Dauer % 60);
+		Zeit = (Sekunden < 10) ? ":0":":" ;
+		AusgabeFenster.alert(Ergebnis+"\n\nZeitbedarf: "+Minuten+Zeit+Sekunden+" Minuten");
+
+		for (var i=1; i<=LetzteFrage; i++) weak[q[i].kap][q[i].pos] = q[i].weak;
+		setCookieAll();
+
+	}
+}
+
+function ClearAusdruck(form) {
+	var sFehler = 0;
+	var Fehler = 0;
+	var i=0;
+	var j=0;
+	var k=0;
+	var d=0;
+	var nAntw = 0;
+	var Nr = 0;
+	var s="";
+
+	for ( i=0;i<effFragen;i++) {
+
+		Fehler =0;
+		s = form.elements[k].name;
+		Nr = eval(s.substr(0,s.length-1));
+
+		if (Nr < 0) {
+			d++;
+			Nr =-Nr;
+		}
+		nAntw = q[Nr].antw;
+		for ( j = 0;j<nAntw;j++) {
+			form.elements[k+j].checked = false;
+			AusgabeFenster.document.images[k+j+d].src = Icons[0].src;
+		}
+		k += nAntw;
+	}
+	form.elements.Auswerten.value = "Fragebogen abgeben";
+	Sperre = false;
+	Uhr = new Date();
+}
+
+function ZeigeFormular() {
+	var chkboxName ="";
+	var Temp =0;
+	var Halb = Math.round( (Kapitel.length) /2 );
+	InfoMsg("<h2>Fragen mischen</h2>");
+	akt_user();
+	var Anrede = (""<Nickname) ? Nickname +", h":"H";
+	var doc = parent.Details;
+	with (doc.document) {
+		open();
+		writeln(html_kopf('Mischen'));
+		writeln("<body>");
+		writeln(Anrede+"ier kannst Du Fragen aus beliebigen Kapitel mischen und bei Bedarf zu einem <b>richtigen Fragebogen</b> zusammenstellen. W&auml;hle dazu mindestens ein&nbsp;Kapitel aus. ");
+		writeln("Warte bis die <b>Ampel</b> in der Kopfzeile auf <span class='gruen'>gr&uuml;n</span> springt.");
+		writeln("Klicke auf <B>[Normal]</B> um wie &uuml;blich eine Frage nach der anderen zu l&ouml;sen. ");
+		writeln("Klicke auf <B>[Bildschirm]</B> um einen simulierten Fragebogen in einem <b>neuen Fenster</b> zu erzeugen und auszuf&uuml;llen.");
+		writeln("Klicke auf <b>[Drucker]</b> um einen Fragebogen in einem <B>neuen Fenster</B> zu erzeugen. Du kannst diesen Bogen dann ausdrucken. <small>(Stelle vorher unter [Datei] [Seite einrichten] 2&nbsp;cm f&uuml;r den linken Rand und 0.8&nbsp;cm f&uuml;r den rechten Rand ein.)</small>");
+		writeln("<FORM Name='Umfang' onSubmit='parent.Index.SuchForm();'><TABLE width='100%' Cellspacing='0' cellpadding='2' border='0'><TR><TD class='hgRot' colspan='2'>Fragen aus den Kapiteln &nbsp; <INPUT NAME='Alle' TYPE='BUTTON' VALUE='Alle' onClick='parent.Index.alleLaden(this.form);'></TD><TD>&nbsp;</TD><TD class='hgBlau' colspan='2'>Ausdruck-Parameter</TD></TR><TR valign=top><TD>");
+		for (var i=0;i<2;i++) {
+			for (var j=0;j<Halb;j++) {
+				Temp = i *Halb+j +1;
+				chkboxName = (Temp < 10) ? "k0"+Temp: "k"+Temp;
+				if (Kapitel[i*Halb+j] !=null)  writeln("<Input Type=CheckBox Name='"+chkboxName+"' onClick='parent.Index.GetFile(this.form,this.name);'>"+Kapitel[i*Halb+j]+"<BR> ");
+			}
+			writeln("</td><td>");
+		}
+		writeln("&nbsp;&nbsp;</TD><td>");
+		writeln("<Input Type=CheckBox Name='Streifen' "+ ((Streifen) ? "Checked":"") +" onClick='parent.Index.Streifen=this.checked;'>Mit Kontroll-Streifen<BR>");
+		writeln("<Input Type=CheckBox Name='AutoNum' "+ ((AutoNum) ? "Checked":"") +" onClick='parent.Index.AutoNum=this.checked;'>Auto-Numerierung<BR>");
+		writeln("<Input Type=CheckBox Name='Manuell' "+ ((Manuell) ? "Checked":"") +" onClick='parent.Index.Manuell=this.checked;'>Fragen selber ");
+		writeln("<Input Type=Button Name='ManWahl' value='ausw&auml;hlen' onClick='parent.Index.ManWahl(0);'> ("+Zeiger+")<BR>");
+		writeln("<font size=-1>&Uuml;berschrift auf der 1. Seite:</font><BR><Input Size='35' Maxlength='50' name='Headline' value="+StandardHeadline+">");
+		writeln("</TD></TR></TABLE><HR>");
+		writeln("<TABLE Width=100% Cellspacing=0 cellpadding=2 border=0><TR vAlign=top><TD width=\"85%\">");
+		writeln("Anzahl Fragen: <Select Name='Anzahl'><Option VALUE='7'>7<Option VALUE='10'>10<Option VALUE='15'>15<Option VALUE='20'>20<Option VALUE='25'>25<Option VALUE='30'>30<Option VALUE='50'>50<Option VALUE='999'>Alle</SELECT>");
+		writeln(" Ausgabe: <INPUT NAME='Neustart' TYPE='BUTTON' VALUE='Normal' onClick='parent.Index.TeilFragen(this.form);'>&nbsp;");
+		writeln("<INPUT NAME='Anzeige' TYPE='BUTTON' VALUE='Bildschirm' onClick='parent.Index.PrepAusdruck(this.form,false);'>&nbsp;");
+		writeln("<INPUT NAME='Drucken' TYPE='BUTTON' VALUE='Drucker' onClick='parent.Index.PrepAusdruck(this.form,true);'>&nbsp;</TD>");
+		if (window.RegExp && SucheJa) writeln("<TD width=\"15%\" align='right'><INPUT NAME='Suchen' TYPE='BUTTON' VALUE='Suche' onClick='parent.Index.SuchForm();'></TD>");
+		writeln("</TR></TABLE></FORM>");
+		writeln("Wenn Du einen <b>Kontrollstreifen</b> mitdruckst, schneide diesen von der rechten Seite des Ausdrucks ab, <b>bevor</b> Du die B&ouml;gen verwendest bzw. kopierst. Nach dem Ausf&uuml;llen der Antworten kannst Du dann den entsprechenden Kontrollstreifen anlegen und schnell und sicher die gegebenen Antworten auf Richtigkeit pr&uuml;fen.");
+		writeln("<div><dt><dd></BODY></HTML>");
+		close();
+	}
+	for (var i=1;i<=Kapitel.length;i++) {
+		parent.frames[4].document.forms[0].elements[i].checked=Vorhanden[i]; }
+	for (var i=0; i<doc.document.Umfang.Anzahl.length; i++) {
+		var j = false;
+		if(doc.document.Umfang.Anzahl.options[i].value == AnzFragen) {
+			doc.document.Umfang.Anzahl.options[i].selected=true;
+			j = true;
+		}
+		if ( ! j ) doc.document.Umfang.Anzahl.options[2].selected = true;
+	}
+}
+
+function TeilFragen(form) {
+	if (! Loading) {
+		var s = 0;
+		var Zufall = new Array();
+
+		AnzFragen = parseInt(form.Anzahl[form.Anzahl.selectedIndex].value);
+		if (nGemischt>1) {
+			if (nGemischt < AnzFragen) AnzFragen=nGemischt-1;
+			Zufall = FragenWaehlen(nGemischt);
+			LetzteFrage = Math.min(Zufall.length,AnzFragen);
+			if (LetzteFrage > 0) {
+				var Mischen = new Array();
+				for (var i = 0; i<LetzteFrage;i++) {
+					Mischen[i] = [Math.random(),Zufall[i][1]];
+				}
+				Mischen.sort();
+				for (var i = 0; i<LetzteFrage;i++) {
+					q[i+1] = bt[Mischen[i][1]];
+				}
+				Modus = 2;
+				Thema = "Gemischte Kapitel";
+				NeuStart();
+			} else {
+				alert("Du bist perfekt");
+			}
+		} else {
+			alert("Mindestens ein Kapitel\nmuss ausgewaehlt sein");
+		}
+	} else {
+		Geduld();
+	}
+}
+
+function FragenWaehlen(nFragen) {
+	var s,p,n = 0;
+	var Zufall = new Array();
+
+	for (var i=1; i<nFragen; i++) {
+		s = weak[bt[i].kap][bt[i].pos];
+		if (s==23) s=4;
+		if (Automat) {
+			p = 1;
+			for (var j=9;j>=s;j--) p *= Math.random();
+			if (s==0) p *= Math.random();
+		} else {
+			if (AlleFragen) {
+				p = Math.random();
+			} else {
+				p =s +Math.random();
+			}
+		}
+		if (Automat || AlleFragen || s > 0 ) {
+			Zufall[n++] = [p,i];
+		}
+	}
+	Zufall.sort(Desc);
+	return Zufall;
+}
+
+function Desc(a,b) {
+	return b[0]-a[0];
+}
+
+function AddOwnKap() {
+	var Bez = prompt("Welches Kapitel soll ich hinzuf&uuml;gen (Bezeichung)","");
+	if (Bez>"") {
+		if (Kapitel.length== nKapitel) {
+			NeuerEintrag = new Option("--------------------");
+			parent.Index.document.Links.Kapitel.options[parent.Index.document.Links.Kapitel.length] = NeuerEintrag;
+		}
+		Kapitel[Kapitel.length] = Bez;
+		NeuerEintrag = new Option(Bez);
+		parent.Index.document.Links.Kapitel.options[parent.Index.document.Links.Kapitel.length] = NeuerEintrag;
+
+	}
+}
+
+function Formular() {
+	if (FormWindow==0) {
+		ZeigeFormular();
+		FormWindow=1;
+		InfoWindow=0;
+		ToolWindow=0;
+		Status=0;
+	} else {
+		InfoWindow=0;
+		ToolWindow=0;
+		FormWindow = 0;
+		ZeigeEinleitung();
+	}
+}
+
+var SucheJa = true;
+//rem  												---  Suche ---
+function SuchVar() {
+	SuchVar.allfa = false;
+	SuchVar.nurf = false;
+	SuchVar.nura = false;
+	SuchVar.ganz = false;
+	SuchVar.gk = false;
+	SuchVar.all = false;
+	SuchVar.ok = false;
+	SuchVar.und = false;
+}
+var Search = new SuchVar();
+var Filter="";
+var LocFenster = "";
+
+function FuellSuchForm(doc,Search) {
+	with (doc.document) {
+		writeln("<FORM Name='Suche' onsubmit='return false;'><TABLE><TR><TD class='hgGruen'>Suche nach: <Input type='text' Size='20' Maxlength='50' name='Filter' value='"+Filter+"'></TD>");
+		writeln("<TD><Input Type='Button' Name='Suche' value='Suchen' onClick='return parent.Index.Suchen(this.form);'></TD></TR>");
+		writeln("<TR valign=top><TD>"+radio('Wo','Nurf',Search.allfa)+" In Fragen und Antworten suchen<BR>");
+		writeln(radio('Wo','Nurf',Search.nurf) + " Nur in Fragen suchen<BR>");
+		writeln(radio('Wo','Nurf',Search.nura) + " Nur in Antworten suchen</TD>");
+		writeln("<TD>" + checkbox('Opt','Ganz',Search.ganz) + " Nur Ganzes Wort<BR>");
+		writeln(checkbox('Opt','Gk',Search.gk) + " Gross-/Kleinschreibung beachten<BR>");
+		writeln(checkbox('Opt','Und',Search.und) + " UND-Verkn&uuml;pfung<BR>");
+		writeln(checkbox('Opt','Alles',Search.all) + " Fragen und Antworten zeigen<BR>");
+		writeln(checkbox('Opt','Richtig',Search.ok) + " Richtige Antwort markieren</TD></TR>");
+		writeln("</TABLE></FORM>Wenn Du ein bi&szlig;chen Geduld aufbringst, gibt es hier die komplette <A href='javascript:parent.Index.Haeufigkeit()'>Stichwortliste</A> aller aktuell ausgew&auml;lten Kapitel</BODY></HTML>");
+	}
+}
+
+function SuchForm() {
+	var doc = parent.Details;
+
+	if (nGemischt > 1) {
+		if (Filter == "") {
+			Search.allfa = true;
+			Search.nurf = false;
+			Search.nura = false;
+			Search.ganz = false;
+			Search.gk = false;
+			Search.all = true;
+			Search.ok = false;
+			Search.und = false;
+		}
+		InfoMsg("<h2>Suchen</h2>");
+		with(doc.document) {
+			open();
+			writeln(html_kopf("Suche"));
+			writeln("<body onLoad='parent.Index.Suche_focus();'>");
+			writeln("Hier hast Du die M&ouml;glichkeit, die ausgew&auml;hlten Kapitel nach Stichworten zu durchsuchen. Wenn Du mehr als ein Wort eingibst, wird standardm&auml;&szlig;ig eine <B>ODER</B>-Suche durchgef&uuml;hrt. Zusammenh&auml;ngende Begriffe wie <B>Z 2</B> suchst Du, indem Du den Begriff in Anf&uuml;hrungszeichen setzt.<P>");
+			FuellSuchForm(doc,Search);
+			close();
+		}
+		FormWindow = 0;
+	} else {
+		alert("Du musst mindestens\nein Kapitel markiert haben");
+	}
+}
+
+function Suche_focus(){
+	var doc = parent.Details;
+	with(doc.document) {
+		Suche.Filter.focus();
+		Suche.Filter.select();
+	}
+
+}
+
+function Suchen(maske) {
+	Filter = maske.Filter.value;
+	var s = Filter;
+	s = s.replace(/^\s/,"");
+	s = s.replace(/\s$/,"");
+	if (s > " ")  {
+		Ampel("ffw_rot.htm");
+		window.setTimeout("Suche()",100);
+	} else {
+		alert("Du musst erst\neinen Suchbegriff eingeben");
+	}
+	return false;
+}
+
+
+function Suche() {
+	var maske = parent.Details.document.Suche;
+//rem 	alert(maske.name);
+	var s = Filter;
+	s = s.replace(/^\s/,"");
+	s = s.replace(/\s$/,"");
+	s = s.replace(/([)(.?])/g,"\\$1");
+
+	var Suche = new RegExp;
+	var wl = new Array();
+	var temp = new Array();
+	var doc = parent.Details;
+	var Treffer = 0;
+	Filter = maske.Filter.value;
+	var nurf = maske.Wo[1].checked;
+	var nura = maske.Wo[2].checked;
+	var ganz = maske.Opt[0].checked;
+	var gk = maske.Opt[1].checked;
+	var und = maske.Opt[2].checked;
+	var alle = maske.Opt[3].checked;
+	var ok = maske.Opt[4].checked;
+	var a,b,c,d,e,o ="";
+	var Kap,fNr = 0;
+	var hit = false;
+	var mark = "";
+	var f = "";
+
+	if (s.search(/^".+?"$/) >-1) {
+		s= s.match(/^"(.+?)"$/);
+		wl[0] = RegExp.$1;
+		mark = wl[0];
+	} else {
+		temp = s.split(" ");
+		if (ganz) {
+			for (var i=0;i<temp.length;i++) {
+				temp[i] = "\\b"+temp[i]+"\\b";
+			}
+		}
+		if (und) {
+			wl = temp;
+		} else {
+			wl[0] = temp.join("|");
+		}
+		mark = temp.join("|");
+	}
+
+	InfoMsg("<h2>Suchergebnisse</h2>");
+
+
+	with(doc.document) {
+		open();
+		writeln(html_kopf("Suchergebnisse"));
+		writeln("<body>");
+		for (var i=1;i<nGemischt;i++) {
+			for (var j=1;j<=Kapitel.length;j++) { if (ZeigerAnf[j] == i) window.status = Math.round( i/nGemischt*100) + "%  Kapitel: "+ Umlaute(Kapitel[j-1]); }
+
+			f = Umlaute(bt[i].frage);
+			if (ok) o = bt[i].ok;
+
+			a = Umlaute(bt[i].a); var abc = a;
+			b = Umlaute(bt[i].b); abc += "\n" +b;
+			if (bt[i].c != null) {c = Umlaute(bt[i].c);  abc += "\n" +c; } else c= "";
+			if (bt[i].d != null ) {d = Umlaute(bt[i].d);  abc += "\n" +d; } else d= "";
+			if (bt[i].e != null ) {e = Umlaute(bt[i].e);  abc += "\n" +e; } else e= "";
+			var x = f + "\n"+abc;
+			if (nura) x = abc;
+			if (nurf) x = f;
+
+			hit = true;
+			for (var y =0;y < wl.length; y++) {
+
+
+				if (gk) {
+					Suche = eval('\/\('+wl[y]+'\)\/g');
+				} else {
+					Suche = eval('\/\('+wl[y]+'\)\/gi');
+				}
+				if (!Suche.test(x)) hit = false;
+			}
+
+			if (hit) {
+				writeln("<SPAN class='hgGrau'>"+Kapitel[bt[i].kap-1]+"</SPAN><SPAN class='hgBlau'>Nr: "+(bt[i].pos)+"</SPAN><BR>");
+
+
+
+				if (gk) {
+					Suche = eval('\/\(' +mark+ '\)\/g');
+				} else {
+					Suche = eval('\/\(' +mark+ '\)\/gi');
+				}
+				f = f.replace(Suche,"<span class='rot'>$1</span>");
+
+				writeln("<B>"+f+"</B>");
+				if (alle) {
+					writeln("<BR>a) <SPAN" + ((o == "a") ? " class='ok'":"") + ">"+a.replace(Suche,"<b class='rot'>$1</b>")+"</span>");
+					writeln("<BR>b) <SPAN" + ((o == "b") ? " class='ok'":"") + ">"+b.replace(Suche,"<b class='rot'>$1</b>")+"</span>");
+					if (c>"") writeln("<BR>c) <SPAN" + ((o == "c") ? " class='ok'":"") + ">"+c.replace(Suche,"<b class='rot'>$1</b>")+"</span>");
+					if (d>"") writeln("<BR>d) <SPAN" + ((o == "d") ? " class='ok'":"") + ">"+d.replace(Suche,"<b class='rot'>$1</b>")+"</span>");
+					if (e>"") writeln("<BR>e) <SPAN" + ((o == "e") ? " class='ok'":"") + ">"+e.replace(Suche,"<b class='rot'>$1</b>")+"</span>");
+				}
+				writeln("<HR>");
+				Treffer++;
+			}
+		}
+		if (Treffer == 0) 	writeln("<HR>Keine Treffer f&uuml;r "+((temp.length>1) ? "die Stichworte":"das Stichwort") +": <FONT COLOR='red'><b>"+Filter+"</b></FONT>");
+
+		Search.allfa = (!nurf && !nura);
+		Search.nurf = nurf;
+		Search.nura = nura;
+		Search.ganz = ganz;
+		Search.gk =   gk;
+		Search.und =  und;
+		Search.all =  alle;
+		Search.ok =   ok;
+
+		FuellSuchForm(doc,Search);
+
+		writeln("</body></HTML>");
+		close();
+	}
+	window.status = "";
+
+	NaviMsg("<b>"+Treffer+"</b> von "+(nGemischt-1)+" Fragen");
+}
+
+function Umlaute(s) {
+	s = s.replace(/&nbsp;/g," ");
+	s = s.replace(/&auml;/g,"ä");
+	s = s.replace(/&ouml;/g,"ö");
+	s = s.replace(/&uuml;/g,"ü");
+	s = s.replace(/&Auml;/g,"Ä");
+	s = s.replace(/&Ouml;/g,"Ö");
+	s = s.replace(/&Uuml;/g,"Ü");
+	s = s.replace(/&szlig;/g,"ß");
+	s = s.replace(/&#176;/g,"°");
+	s = s.replace(/&#178;/g,"²");
+	s = s.replace(/&#179;/g,"³");
+	return s;
+}
+
+function umlaute_zu_ae(s) {
+	s = Umlaute(s);
+	s = s.replace(/ä/g,"ae");
+	s = s.replace(/ö/g,"oe");
+	s = s.replace(/ü/g,"ue");
+	s = s.replace(/Ä/g,"Ae");
+	s = s.replace(/Ö/g,"Oe");
+	s = s.replace(/Ü/g,"Ue");
+	s = s.replace(/ß/g,"ss");
+	return s;
+}
+
+function Haeufigkeit() {
+	Ampel("ffw_rot.htm");
+	window.setTimeout("WortCounter()",100);
+}
+
+function WortCounter() {
+	var t = new Array();
+	var Liste = new Object();
+	var Frage = "";
+	var Wort = "";
+
+
+   var  Suche = /[A-ZÄÜÖ][\wäöüß-]*/;
+
+	for (var i = 1;i<nGemischt;i++) {
+		Frage = Umlaute(bt[i].frage + " " +bt[i].a + " " +bt[i].b);
+		if (bt[i].c != null )  Frage +=  " " +Umlaute(bt[i].c);
+		if (bt[i].d != null )  Frage +=  " " +Umlaute(bt[i].d);
+		if (bt[i].e != null )  Frage +=  " " +Umlaute(bt[i].e);
+		for (var j=1;j<=Kapitel.length;j++) {
+			if (ZeigerAnf[j] == i )  window.status = Math.round( i/nGemischt*100) + "%  Kapitel: "+ Umlaute(Kapitel[j-1]);
+		}
+		t = Frage.split(" ");
+		for (var j=0;j<t.length;j++) {
+
+			Wort = Suche.exec(t[j]);
+			if (Wort > "")  {
+				if (Wort[0].search(/-$/) != -1) Wort = Wort[0].replace(/(.+?)-$/,"$1");
+				if (Wort[0] > "" ) {
+					if (isNaN(Liste[Wort] )) {
+						Liste[Wort] = 1;
+					} else {
+						Liste[Wort]++;
+					}
+				}
+
+			}
+		}
+	}
+
+	var j= 0;
+	var Ergebnis = new Array;
+	for (var i in Liste) {
+		if (i.search( /^(Ab|Alle|Als|An|Art|Arten|Auf|Aus|Bei|Beim|Bis|Darf|Den|Der|Die|Diese|Dieser|Damit|Das|Dass|Deshalb|Ein|Eine|Es|Er|Erst|Freie|Für|Hier|Im|In|Ist|Ja|Je|Jeder|Kann|Man|Mit|Muss|Nach|Nachdem|Neben|Nein|Nicht|Nur|Sie|So|Solche|Um|Unter|Von|Wann|Warum|Was|We(il|lcher|lches|lcher|n|nn|r|lche)|Wie|Wieviel|Wo|Wo(durch|her|mit|nach|raus|rauf|rin|von|zu)|Zu|Zum|Zur)$/ ) ==-1 ) {
+			Ergebnis[j++] = i;
+		}
+	}
+	window.status = "Sortieren ...";
+	Ergebnis.sort();
+
+	var Links = "<div>";
+	var Buchst = "";
+	for (var i = 0;i < Ergebnis.length;i++) {
+		if (Ergebnis[i].charAt(0) > Buchst) {
+			Buchst = Ergebnis[i].charAt(0);
+			if (document.all) {
+				Links += "<A HREF='javascript:parent.Details.document.all."+Buchst+".scrollIntoView(true);'>"+Buchst+"</A> ";
+			} else {
+				Links += "<A HREF='javascript:parent.Index.GeheZu(\""+Buchst+"\");'>"+Buchst+"</A> ";
+			}
+
+		}
+	}
+	Links += "</div>";
+	InfoMsg("<h2 class='stichworte'>Stichworte</h2>"+Links);
+
+	var doc = parent.Details;
+	var x = 5;
+	window.status = "Ausgeben ...";
+
+	with (doc.document)  {
+		open();
+		writeln(html_kopf('Haeufigkeiten'));
+		writeln("<body>");
+
+		Buchst = "";
+		for (var i = 0;i < Ergebnis.length;i++) {
+			if (Ergebnis[i].charAt(0) > Buchst) { Buchst = Ergebnis[i].charAt(0); write("<BR><H2><A NAME='"+Buchst+"'>"+Buchst+"</a></H2>");  }
+			writeln(Ergebnis[i]+" = " +Liste[Ergebnis[i]] + " x <img src='pg.gif' width="+(Liste[Ergebnis[i]]*x)+" Height=12 alt=''><BR>");
+		}
+		writeln("<HR>");
+ 		FuellSuchForm(doc,Search);
+		if (document.all) {
+				var Gehezu = "<A HREF='javascript:parent.Details.document.all.Ende.scrollIntoView(true);'>Such-Formular</A> ";
+			} else {
+				var Gehezu = "<A HREF='javascript:parent.Index.GeheZu(\"Ende\");'>Such-Formular</A> ";
+			}
+
+		NaviMsg("<B>"+Ergebnis.length+"</B> Stichworte<br>"+ Gehezu);
+		writeln("<A Name='Ende'> </A></body></html>");
+		close();
+	}
+	window.status = "";
+}
+
+function GeheZu(x) {
+	var doc = parent.Details;
+	if (document.all) {
+
+	} else {
+	   with (doc.document)  {
+			anchors["Ende"].focus();
+			anchors[x].focus();
+			anchors[x].blur();
+		}
+	}
+
+
+}
+//rem 															--- Ende Suche ---
+
+function Angepasst(msg) {
+	var breite = 240;
+	if (window.innerWidth) {
+		breite = parent.window.innerWidth;
+	} else if (document.documentElement.clientWidth) {
+		breite = parent.document.documentElement.clientWidth;
+
+	} else if (document.body.clientWidth) {
+		breite = parent.document.body.clientWidth;
+	}
+	var fontsize = (breite > 850) ? 200 : 150;
+	return "<h1 style='font-size: "+fontsize+"%;'>"+msg+"</h1>";
+}
+
+function ZeigeEinleitung() {
+	if (InfoWindow==0) {
+		window.open("ffw_dat.htm","Details");
+		InfoMsg(Angepasst("Feuerwehr-Fragebogen"));
+		akt_user();
+		InfoWindow=1;
+		ToolWindow=0;
+		FormWindow=0;
+
+	} else {
+		if (Status>0) {
+			if (Status==1) Anzeige(Frage,OffenLegen); else Statistik();
+		}
+	}
+
+}
+
+function Einstellungen() {
+	if (ToolWindow==0) {
+		InfoMsg("<h2>Einstellungen</h2>");
+		NaviMsg(("" < User ? "<b style='color:#008;'>"+User+"</b>":""));
+		var Anrede = (""<Nickname) ? Nickname +", h":"H";
+
+		var doc = parent.Details;
+		with (doc.document) {
+			open();
+			writeln(html_kopf('Einstellungen'));
+			writeln("<body onLoad='parent.Index.Default();'>");
+			writeln(Anrede + "ier kannst Du verschiedene Optionen w&auml;hlen, um den Schwierigkeitsgrad Deinen F&auml;higkeiten anzupassen.");
+			writeln("<FORM Name='Optionen'><TABLE BORDER='0' CELLSPACING='0' Cellpadding='3' WIDTH='100%'><TR valign='top'><TD>");
+
+			writeln("<TABLE BORDER=0 CELLSPACING=0 Cellpadding=1 WIDTH=100%>");
+			writeln("<TR BGCOLOR='#cccccc'><TD><B>&nbsp;Fehlermeldungen</B></TD></TR>");
+			writeln("<TR><TD><IMG SRC='gelb.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Feedback' Value='gelb'>Sofort,&nbsp;richtige&nbsp;Antwort<SPAN style='background-color:#FFFF80;'>&nbsp;gelb&nbsp;markieren&nbsp;</SPAN></TD></TR>");
+			writeln("<TR><TD><IMG SRC='laut.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Feedback' Value='ja'>Sofort, wenn richtig sofort weiter</TD></TR>");
+			writeln("<TR><TD><IMG SRC='leise.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Feedback' Value='nein'>Erst ganz am Ende des Kapitels</TD></TR>");
+			writeln("<TR><TD><IMG SRC='pixel.gif' Width=1 Height=8 alt=''></TD></TR>");
+			writeln("<TR BGCOLOR='#cccccc'><TD><B>&nbsp;Reihenfolge der Fragen</B></td></tr>");
+			writeln("<TR><TD><IMG SRC='123.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Reihenfolge' Value='ja'>Standard aufsteigend</TD>");
+			writeln("<TR><TD><IMG SRC='n123.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Reihenfolge' Value='nein'>Zuf&auml;llig</TD>");
+			writeln("<TR><TD><IMG SRC='pixel.gif' Width=1 Height=8 alt=''></TD></TR>");
+			writeln("<TR BGCOLOR='#cccccc'><TD><B>&nbsp;Reihenfolge der Antworten</B></TD></TR>");
+			writeln("<TR><TD><IMG SRC='abc.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Ordnung' Value='ja'>Standard</TD></TR>");
+			writeln("<TR><TD><IMG SRC='nabc.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='Ordnung' Value='nein'>Zuf&auml;llig </TD></TR></TABLE>");
+
+			writeln("</TD><TD>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</TD><TD>");
+
+			writeln("<TABLE BORDER=0 CELLSPACING=0 Cellpadding=1 WIDTH=100%>");
+			writeln("<TR BGCOLOR='#cccccc'><TD colspan='2'><B>&nbsp;Anzahl der Fragen</B></TD></TR>");
+			writeln("<TR><TD colspan='2'><IMG SRC='alle.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='AlleFragen' Value'ja'>Alle Fragen stellen</TD></TR>");
+			writeln("<TR><TD colspan='2'><IMG SRC='auto.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='AlleFragen' Value='teil'>Automatisch</TD></TR>");
+			writeln("<TR><TD colspan='2'><IMG SRC='nur.gif' align='left' Width=26 Height=20 alt=''><Input Type=Radio Name='AlleFragen' Value='nein'>Nur&nbsp;Problemfragen");
+			writeln("<TR><TD colspan='2'><br><p style='background-color:#def; border:solid 1px black; padding: 5px;'>Wie m&ouml;chtest Du angesprochen werden?<br><Input class='eingabe' Type='text' Name='Nickform' Value='" + (( "" < Nickstart) ? Nickstart +" ":"") + Nickname+ "' size='22' maxlength='25'></p>");
+			writeln("</TD></TR></TABLE></TD></TR></TABLE>");
+
+			writeln("<P><Input Type=CheckBox Name='Versteckt'>F&uuml;r blutige Anf&auml;nger: Richtige Antwort<SPAN style='background-color:#FFFF80;'> im Voraus gelb markieren </SPAN><BR>");
+			writeln("<Input Type=CheckBox Name='Zweifel'>Fragen als unsicher bewerten lassen, wenn die Antwort-Zeit mehr als <Input Type='Text' Name='Prozent' value='50' Size='4' maxlength='4' style='text-align: right; padding:0 2px;'> % &uuml;ber dem Durchschnitt liegt.");
+
+			writeln("</TD></TR></TABLE>");
+			writeln("<P><TABLE WIDTH=100%><TR><TD WIDTH=50%><INPUT NAME='OK' TYPE='BUTTON' VALUE='in Ordnung' onClick='parent.Index.Optionen(this.name,this.form);'>&nbsp;");
+
+				writeln("<INPUT NAME='Save' TYPE='BUTTON' VALUE='Speichern' onClick='parent.Index.Optionen(this.name,this.form);'>");
+
+			writeln("<INPUT NAME='Abbruch' TYPE='BUTTON' VALUE='Abbrechen' onClick='parent.Index.Zurueck();'><TD><TD WIDTH=50% align='right'>");
+			writeln("<INPUT NAME='Beginner' TYPE='BUTTON' VALUE='Beginner' onClick='parent.Index.Setze(0);'>&nbsp;<INPUT NAME='Normal' TYPE='BUTTON' VALUE='Normal' onClick='parent.Index.Setze(1);'>&nbsp;<INPUT NAME='Profi' TYPE='BUTTON' VALUE='   Profi   ' onClick='parent.Index.Setze(2);'></TD></TR></TABLE></FORM>");
+			writeln("<p><b class='rot'>Beachte:</b> Diese Optionen werden nur durch Klick auf <b>[in&nbsp;Ordnung]</b> (tempor&auml;r) bzw. <b>[Speichern]</b> (dauerhaft) &uuml;bernommen. Bei Wiederholung der Problem-<wbr>Fragen kommen diese immer in Standard-<wbr>Reihenfolge und Fehler werden sofort gemeldet.</p>");
+
+			writeln("</body></html>");
+			close();
+		}
+
+		ToolWindow=1;
+		InfoWindow=0;
+		FormWindow=0;
+	} else {
+		ToolWindow=0;
+		if (Status>0) {
+			if (Status==1) {
+				InfoMsg("<h2>Kapitel: <span class='rot'>"+Thema+"</h2>");
+				window.open("ffw_navi.htm","Navi");
+				Anzeige(Frage,OffenLegen);
+			} else {
+				Statistik();
+			}
+		} else {
+			InfoWindow=0;
+			ToolWindow=0;
+			ZeigeEinleitung();
+		}
+	}
+}
+
+var vorwort = true;
+function toggle() {
+	vorwort = !vorwort;
+	var doc = parent.Details;
+	with (doc.document) {
+		parent.Details.document.getElementById("vorwort").style.display = (vorwort ? "block":"none");
+		parent.Details.document.getElementById("vorwort2").style.display = (vorwort ? "none":"block");
+	}
+}
+
+function Benutzer() {
+	InfoMsg("<h2>Benutzerverwaltung</h2>");
+	NaviMsg("<div style='color:#008;'><b>"+User+"</b></div>" + (Nickname != User ? "<div class='hgGrau rand'>"+Nickname+"</div>":""));
+	InfoWindow = 0;
+	ToolWindow = 0;
+	FormWindow = 0;
+
+   var Regeln = "<h4>Regeln f&uuml;r Benutzernamen</h4><ul>\n";
+		 Regeln += "<li>Der Benutzername kann sp&auml;ter <span class='gelb'>NICHT</span> mehr ge&auml;ndert werden</li>\n";
+		 Regeln += "<li>Der Benutzername sollte innerhalb der Feuerwehr/Wettkampfgruppe <b>eindeutig</b> sein</li>\n";
+		 Regeln += "<li>Der Benutzername muss mit einem Buchstaben beginnen (a-z plus Umlaute)</li>\n";
+		 Regeln += "<li>danach sind auch Ziffern, Leerzeichen, Punkt und Bindestrich erlaubt.</li>\n";
+		 Regeln += "<li>Der Benutzername darf 35 Zeichen lang sein</li>\n";
+		 Regeln += "</ul>\n";
+		 Regeln += "<p>Meine Empfehlung: Vor- und Nachname verwenden</p>\n";
+
+	var doc = parent.Details;
+	with (doc.document) {
+		open();
+		writeln(html_kopf("Benutzer"));
+		writeln("<body><div id='vorwort' style='display:"+(vorwort ? "block":"none")+";'>");
+		writeln("<div style='float:right; width:200px;'><a href='javascript:parent.Index.toggle()'>Vorwort ausblenden</a></div>");
+		writeln("<h3>Vorwort</h3>");
+		writeln("<p>Ab dieser Version k&ouml;nnen <b>mehrere Benutzer gleichzeitig</b> den gleichen Browser benutzen, bzw. ein Benutzer kann unter dem <b>GLEICHEN Namen</b> auf mehreren Rechnern (PC zu Hause, Laptop, Schulungsraum, Internet usw.) trainieren. Der Ausbildungsstand kann von einem Rechner exportiert und auf einem anderen Rechner importiert werden. Dabei werden standardm&auml;&szlig;ig nur die besseren Werte &uuml;bernommen.<p>");
+		writeln("<p><b class='rot'>Ganz wichtig:</b> Dazu ist es erforderlich, dass Du dich unter <b>Deinem Namen</b> einrichtest. Da dieser Name sp&auml;ter <b class='gelb'>nicht</b> mehr ge&auml;ndert werden kann, solltest Du Deinen Vor- und Nachnamen verwenden!. Der Benutzername sollte in Eurer Gemeinde einmalig sein. Du mu&szlig;t diesen Namen dann auch immer auf den anderen Browsern/Rechnern/Internet verwenden.<p>");
+		writeln("<p>Dies wird in Zukunft die Anzeige eines Gesamt-Ausbildungsstandes einer Feuerwehr erm&ouml;glichen. Damit kann dann der theoretische Unterricht entsprechend ausgerichtet werden.</p>");
+		writeln("<p>Beim <b>&Uuml;ben</b> wird nur </b>Dein Vorname verwendet</b>. Hier kannst Du dann auch Deinen Spitznamen oder irgendwas lustiges eingeben und beliebig oft &auml;ndern.</p></div>");
+		writeln("<div id='vorwort2' style='float:right; width:200px; display:"+(vorwort ? "none":"block")+";'><a href='javascript:parent.Index.toggle()'>Vorwort einblenden</a></div>");
+
+
+
+
+
+
+	     writeln("<FORM Name='UserVerwaltung'>");
+		  if ("" == User) {
+			  writeln("<h3>Benutzer-Name festlegen</h3>");
+			  writeln(Regeln);
+			  writeln("Name: <Input Type='Text' Name='deinname' Value='"+User+"' size='20' maxlength='35'> ");
+			  writeln("<INPUT NAME='benenneUser' TYPE='BUTTON' VALUE='Benutzer Name speichern' onClick='parent.Index.AddUserName(0,this.form.deinname.value)'>");
+			  writeln("<p>Nachdem der Benutzer-Name gespeichert ist kannst Du Deinen Ausbildungsstand exportieren/importieren und es k&ouml;nnen weitere Benutzer eingerichtet werden.</p>");
+		  } else {
+			  if (1 < meineUser.length) {
+				  writeln("<h3>Benutzer wechseln</h3>");
+				  for (var i = 0; i < meineUser.length; i++) {
+				     if (User!=meineUser[i]) writeln("<input style='font-size:125%;' type='button' value='"+meineUser[i]+"' onClick='parent.Index.UserWechsel(\""+meineUser[i]+"\")'> ");
+				  }
+			  }
+			  writeln("<h3>Einen neuen Benutzer einrichten</h3>");
+			  writeln(Regeln);
+			  writeln("Name: <Input Type='Text' Name='deinname' Value='' size='20' maxlength='35'> ");
+			  writeln("<INPUT NAME='addUser' TYPE='BUTTON' VALUE='als neuen Benutzer einrichten' onClick='parent.Index.AddUserName(1,this.form.deinname.value)'>");
+
+			  if (1 < meineUser.length) {
+				  writeln("<h3>Benutzer l&ouml;schen</h3>");
+				  writeln("Benutzer-Liste: <select name='tempuser' size='1'>");
+				  var selected = "";
+				  for (var i = 0; i < meineUser.length; i++) {
+					  selected = (User==meineUser[i]) ? " selected":"";
+					  writeln("<option value='"+meineUser[i]+"' "+selected+">"+ meineUser[i]+"</option>");
+				  }
+				  writeln("</select> ");
+				  writeln("<INPUT NAME='killUser' TYPE='BUTTON' VALUE='Benutzer loeschen' onClick='parent.Index.UserKill(this.form);'>");
+			  }
+			  writeln("<h3>Wissensstand auf anderen Rechner/Browser exportieren/importieren</h3>");
+			  writeln("<INPUT NAME='export' TYPE='BUTTON' VALUE='exportieren' onClick='parent.Index.exportCookie();'> ");
+			  writeln("<INPUT NAME='import' TYPE='BUTTON' VALUE='importieren' onClick='parent.Index.importCookieForm(0);'>");
+			  if (entwickler) {
+			  	 writeln("<h3>Wissensstand von mehreren Kameraden gegen&uuml;berstellen</h3>");
+			  	 writeln("<p>Diese Funktion in noch in der Entwicklung. Sie liefert z.Zt. nur eine grafische Darstellung der Ausbildungsst&auml;nde</p>");
+			    writeln("<INPUT NAME='import_gruppe' TYPE='BUTTON' VALUE='alle Kameraden einlesen' onClick='parent.Index.importCookieForm(1);'>");
+			  }
+		  }
+
+		  writeln("</form>");
+
+		writeln("</body></HTML>");
+		close();
+	 }
+}
+
+function CreateNickname(text,mode) {
+	var Nick_array = text.split(" ");
+	var Name = "";
+	var Start = "";
+	if (0 < Nick_array.length) {
+		if (1 == Nick_array.length) {
+			Name = text;
+		} else {
+			if (0 == mode && Nick_array[0].match(/^(der|die|das|ein|eine|unser|unsere)$/)) {
+				Start = Nick_array.shift();
+				Name =  Nick_array.join(" ");
+			} else {
+				if (0 == mode) {
+					Name = text;
+				} else {
+					Name = Nick_array[0];
+				}
+			}
+		}
+	}
+	return [Start,Name];
+}
+
+function LeseSettings() {
+	var Einstellung = new Array;
+	var Werte = new Array;
+	var Korr = 0;
+	var v442 = false;
+	Einstellung  = Cookies[0].split(sep_1);
+	if (Einstellung[1] != null) {
+		Werte = Einstellung[1].split(sep_2);
+		Laut = (Werte[0] == "1");
+		Feedback = (Werte[1] == "1");
+		Reihe = (Werte[2] == "1");
+		Ordnung = (Werte[3] == "1");
+		Zweifel = (Werte[4] == "1");
+		OffenLegen = (Werte[5] == "1");
+		AlleFragen = (Werte[6] == "1");
+		Automat = (Werte[6] == "-1");
+		Prozent = Werte[7];
+		if (isNaN(Prozent) ) Prozent = 50;
+		Settings = Einstellung[1].split(sep_2);
+
+		var Vorname = User.split(" ");
+		Nickname = Vorname[0].substring(0,25);
+      Nickstart = "";
+		if (9 <= Werte.length) {
+			var NickArray = CreateNickname(Werte[8],0);
+			Nickstart = NickArray[0];
+			Nickname = NickArray[1];
+		}
+	} else {
+		SaveOpt();
+	}
+	if (Einstellung[2] != null)  MischDatum  = Einstellung[2];
+	if (Einstellung[0] < "4.42") {v442 = true;}
+	if (Einstellung[0] < "5.2") {
+		var kekse = Version+sep_1+Settings;
+		var Noten = "";
+		var Code = "";
+		var Zeit = "";
+
+		for ( var i = 1 ; i < Cookies.length; i++) {
+			if (Cookies[i] > "") {
+				if (5 == i) {
+					Cookies[i] = "";
+				} else {
+					var Bisher = new Array();
+					var note = 0;
+					Bisher = Cookies[i].split(sep_1);
+					Werte = Bisher[1].split(sep_2);
+					Zeit = Bisher[2];
+					if (Zeit==null) Zeit= "";
+
+					Noten = "";
+					for (var j= 1; j < Werte.length; j++) {
+						note = Math.min(eval(Werte[j])+Korr,9);
+						if (note < 2 ) note =2;
+						Code = 97+note;
+						Noten += unescape("%"+Code.toString(10));
+					}
+					Cookies[i]=umlaute_zu_ae(Kapitel[i-1])+sep_1+Noten+sep_1+Zeit;
+				}
+			} else {
+				if (Cookies[i] == null) {  Cookies[i] = "";}
+			}
+			kekse += sep_0+ " " +Cookies[i];
+		}
+		if (CookieSchreiben(kekse,365*3)) {
+			alert("Willkommen bei der Version "+ Version+"\n\nDie bisherigen Einstellungen\nwurden erfolgreich uebernommen!");
+		} else {
+			alert("632 Es gibt ein Problem");
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	if (Einstellung[0] < "5.4") {
+		var kekse = Version+sep_1+Settings;
+		for ( var i = 1 ; i < Cookies.length; i++) {
+			if (Cookies[i] > "") {
+				if (5 == i) {
+					Cookies[i] = "";
+				} else {
+					Cookies[i] = trim(Cookies[i]);
+				}
+			} else {
+				if (Cookies[i] == null) {  Cookies[i] = "";}
+			}
+			kekse += sep_0 +" " +Cookies[i];
+		}
+		if (CookieSchreiben(kekse,365*3)) {
+			alert("Willkommen bei der Version "+ Version+"\n\nDie bisherigen Einstellungen\nwurden erfolgreich uebernommen!");
+		} else {
+			alert("634 Es gibt ein Problem");
+		}
+
+	}
+}
+
+function CookieSchreiben(kekse,tage) {
+
+		var CookieName = CookieKlasse + "["+User.replace(/ /g,"_")+"]";
+		return (-1 < CookieSave(CookieName,kekse,tage));
+}
+
+function CookieBackup(kekse,tage) {
+		return (-1 < CookieSave("ffw.alraft.bak",kekse,tage));
+}
+
+function CookieSave(CookieName,kekse,tage) {
+		var d = new Date();
+		d.setTime(d.getTime() + (86400 * 1000 * tage));
+		var bisher = document.cookie;
+		var kuchen = CookieName +"=" + trim(kekse);
+		document.cookie = kuchen + "; expires=" + d.toGMTString() +  "; path=/";
+		var neu = document.cookie;
+		return (neu.indexOf(kuchen));
+}
+
+function Default() {
+	var doc = parent.Details;
+
+	with(doc.document) {
+		if (Laut) {
+			Optionen.Feedback[0].checked = true;
+		} else {
+			Optionen.Feedback[(Feedback) ? 1:2].checked = true;
+		}
+		Optionen.Reihenfolge[(Reihe) ? 0:1].checked = true;
+		Optionen.Ordnung[(Ordnung) ? 0:1].checked = true;
+		if (AlleFragen) {
+			Optionen.AlleFragen[0].checked = true;
+		} else {
+			Optionen.AlleFragen[(Automat) ? 1:2].checked = true;
+		}
+//rem 		Optionen.AlleFragen[(AlleFragen) ? 0:1].checked = true;
+		Optionen.Versteckt.checked = OffenLegen;
+		Optionen.Zweifel.checked = Zweifel;
+		Optionen.Prozent.value = Prozent;
+	}
+}
+
+function Setze(level) {
+	var bekannt = true;
+	if (isNaN(Number(level))) {
+		bekannt = false;
+		var NickArray = CreateNickname(level,1);
+		Nickstart = NickArray[0];
+		Nickname = NickArray[1];
+		level = 0;
+	}
+	Laut =		(0 == level);
+	Feedback =	(2 > level);
+	Reihe = 		false;
+	Ordnung = 	false;
+	AlleFragen= false;
+	Automat = 	true;
+	OffenLegen= false;
+	if (level) Prozent = (1==level) ? 75 :50;  else  Prozent = 100;
+	if (bekannt) Default();
+}
+
+function trim(text) {
+	return text.replace(/(^\s{1,}|\s*?$)/g,'');
+}
+
+function AddUserName(neu,fUser) {
+   fUser = trim(fUser);
+	fUser = fUser.replace(/\s{1,}/g,' ');
+	if (0 == neu && "" < User) {
+	   fUser = confirm("Willst Du Deinen Namen von "+ User + " in "+ fUser+" aendern?") ? fUser:"";
+	}
+	if ("" < fUser) {
+
+		var test = fUser.match(/^[a-zäöüáéíóúàèìòùâêîôû][a-z0-9. äöüßáéíóúàèìòùâêîôû-]+$/i);
+		if (test != fUser) {
+			alert("Der Name enthaelt ungueltige Zeichen ");
+			fUser = "";
+		}
+	} else {
+	  if (neu) {
+	  	  alert("Du hast keinen Namen fuer den neuen Benutzer angegeben");
+	  } else {
+	  	  alert("Du hast Deinen Namen nicht angegeben");
+	  }
+
+	}
+
+	if ("" < fUser) {
+		var unbekannt = true;
+		for (var i = 0;i < meineUser.length;i++) {
+		   if (fUser == meineUser[i]) unbekannt = false;
+		}
+		if (unbekannt) {
+		   var zu_einstellungen = true;
+			if (neu) {
+			   Setze(fUser);
+				KalkSettings();
+				Cookies = new Array();
+				var oldUser = User;
+				User = fUser;
+				MischDatum = "-";
+				if (setCookie (-1,"")) {
+				   if (confirm("Der Benutzer "+fUser+ " wurde eingerichtet\nJetzt sofort zu "+fUser+" wechseln?")) {
+				   	if (!SetLastUser(fUser)) {
+					   	User = oldUser;
+	  			      	alert("Der Wechsel zu dem Benutzter "+fUser+" ist NICHT moeglich");
+				   	}
+				   } else {
+						User = oldUser;
+				   }
+				} else {
+					 User = oldUser;
+	  			    alert(fUser+ " konnte NICHT eingerichtet werden!");
+				}
+   			ErstStart(User);
+   			if (fUser == User) {
+					ToolWindow=0;
+					Einstellungen();
+   			} else {
+	   	      Benutzer();
+   			}
+			}  else {
+
+		   	var oldUser = User;
+	   		User = fUser;
+
+				setCookie (-1,"");
+				SetLastUser(fUser);
+
+
+				User = oldUser;
+				CookieSchreiben("",-1);
+
+
+	   		User = fUser;
+				ErstStart(User);
+				ToolWindow=0;
+				Einstellungen();
+			}
+		} else {
+		     alert("Es gibt bereits einen Benutzer\nmit dem Namen "+fUser);
+		}
+	}
+}
+
+function UserWechsel(name) {
+   if(name != User) {
+	   if (confirm("Von Benutzer "+User + " zu Benutzer "+ name+" wechseln ?")) {
+        if ( SetLastUser(name)) {
+		  	  User = name;
+		     ErstStart(User);
+		     ToolWindow=0;
+		     Einstellungen();
+        } else {
+          alert('Benutzerwechsel nicht moeglich');
+        }
+   	}
+   }
+}
+
+function UserKill(form) {
+   var fUser = form.tempuser.value;
+   if(fUser != User) {
+   	if (confirm("Soll der Benutzer '"+ fUser+"' wirklich geloescht werden ???")) {
+         if (-1 == KillCookie(CookieKlasse+"["+fUser.replace(/ /g,"_")+"]")) {
+			   ErstStart(User);
+   	      Benutzer();
+		   } else {
+   			alert("Der aktive Benutzer kann nicht geloescht werden");
+   		}
+   	}
+   } else {
+   	alert("Der aktive Benutzer kann nicht geloescht werden");
+   }
+}
+
+function Optionen(button,form) {
+	Laut = form.Feedback[0].checked;
+	Feedback = form.Feedback[1].checked;
+	Reihe = form.Reihenfolge[0].checked;
+	Ordnung = form.Ordnung[0].checked;
+	AlleFragen = form.AlleFragen[0].checked;
+	Automat = form.AlleFragen[1].checked;
+	OffenLegen = form.Versteckt.checked;
+	Zweifel = form.Zweifel.checked;
+	var Temp = form.Prozent.value;
+	var z = Temp.indexOf("%",0);
+	if (z > 0) Temp = Temp.substring(0,z);
+	if (isNaN(Temp) == false) Prozent = Temp; else alert("Ungueltiger Prozentsatz: "+Temp+"\nwurde nicht uebernommen.");
+
+   var Nicktext = trim(form.Nickform.value);
+   if (0 == Nicktext.length) {
+      var Vorname = User.split(" ");
+	   Nickname = Vorname[0].substring(0,25);
+		Nickstart = "";
+   } else {
+		var test = Nicktext.match(/^[a-zäöüáéíóúàèìòùâêîôû][a-z0-9. äöüßáéíóúàèìòùâêîôû-]*$/i);
+		if (test != Nicktext) {
+			alert("Der Name muss mit einem Buchstaben beginnen (a-z plus Umlaute)\ndanach sind auch Ziffern, Leerzeichen, Punkt und Bindestrich erlaubt");
+		} else {
+			var NickArray = CreateNickname(form.Nickform.value,0);
+			Nickstart = NickArray[0];
+			Nickname = NickArray[1];
+		}
+   }
+	if (button == "Save") SaveOpt();
+	Zurueck();
+}
+
+function KalkSettings() {
+	Settings  = (Laut) ? "1":"0";
+	Settings += sep_2 + ((Feedback) ? "1":"0");
+	Settings += sep_2 + ((Reihe) ? "1":"0");
+	Settings += sep_2 + ((Ordnung) ? "1":"0");
+	Settings += sep_2 + ((Zweifel) ? "1":"0");
+	Settings += sep_2 + ((OffenLegen) ? "1":"0");
+	Settings += sep_2 + ((AlleFragen) ? "1":(Automat) ? "-1":"0");
+	Settings += sep_2 + Prozent;
+	if ("" == Nickstart) {
+		Settings += sep_2 + Nickname;
+	} else {
+		Settings += sep_2 + Nickstart + " " + Nickname;
+	}
+}
+
+function SaveOpt() {
+   KalkSettings();
+	setCookie (-1,"");
+}
+
+function Zurueck() {
+	if (Status==0) {
+		ZeigeEinleitung();
+	} else {
+		if (Status==1) {
+			InfoMsg("<h2>Kapitel: <span class='rot'>"+Thema+"</h2>");
+			window.open("ffw_navi.htm","Navi");
+			Test(Frage);
+		} else {
+			Statistik();
+		}
+	}
+}
+
+function ResetForm(form) {
+	nGemischt=1;
+	for (var i=1;i<10;i++) {
+		form.elements[i].checked=false;
+		Vorhanden[i]=false;
+		ZeigerAnf[i]= 0;
+		ZeigerEnd[i] =0;
+	}
+}
+
+function GetFile(form,datei) {
+	if (! Loading) {
+		if (form.elements[datei].checked) {
+			Loading = true;
+			addFile = true;
+			Lade("ffw_"+datei+".htm");
+		} else {
+			Loading = true;
+			delKapitel(form,datei);
+		}
+	} else {
+		form.elements[datei].checked = ! form.elements[datei].checked;
+		Geduld();
+	}
+}
+
+function ManuellWaehlen() {
+	var p,n = 0;
+	var Zufall = new Array();
+
+	if (Zeiger>0) {
+		for (var i=1; i<nGemischt; i++) {
+			if (bt[i].m) {
+				p = Math.random();
+				Zufall[n++] = [p,i];
+			}
+		}
+	} else {
+		alert("Du musst erst auf 'auswaehlen' klicken\nund dann Deine Fragen auswaehlen");
+	}
+	Zufall.sort(Desc);
+	return Zufall;
+}
+
+function  ManWahl(Kap) {
+	if (nGemischt > 1) {
+		var doc = parent.Info;
+		var Flag = true;
+
+		with(doc.document) {
+			open();
+			writeln(html_kopf("Kapitel ausw&auml;hlen"));
+			write("<body>");
+			write("<FORM Name='Liste'><BIG>Kapitel ausw&auml;hlen:</BIG><BR><Select Name='Kapitel' Size='1' onChange='parent.Index.ManuellZeigen(this.options[this.selectedIndex].value); this.blur();'>");
+			for (var x=1;x<=Kapitel.length;x++) {
+				var y = 0;
+				if (Vorhanden[x]) {
+					for (var i = ZeigerAnf[x]; i < ZeigerEnd[x]; i++) if (bt[i].m) y++;
+					writeln("<Option "+((Kap==x) ? "SELECTED":"")+" VALUE='"+x+"'>"+Kapitel[x-1]+" = "+y);
+				}
+			}
+
+			write("</SELECT>&nbsp;<Input type=Button value='Fertig' onClick='parent.Index.Formular()'></FORM>");
+			close();
+		}
+
+		if (Kap==0) {
+			for (var x=1;x<Kapitel.length;x++) {
+				if (Vorhanden[x] && Flag) {
+					ManuellZeigen(x);
+					Flag= false;
+				}
+			}
+		} else {
+			ManuellZeigen(Kap);
+		}
+
+		NaviMsg(Zeiger+ " Frage"+((Zeiger!=1) ? "n":"")+" ausgew&auml;hlt");
+		FormWindow = 0;
+	} else {
+		alert("Mindestens ein Kapitel\nmuss ausgewaehlt sein");
+	}
+}
+
+function ResetAll() {
+	var Kap= 0;
+	for (var i=1;i<nGemischt;i++) bt[i].m = false;
+	Zeiger = 0;
+	with (parent.Info.document) {
+		Kap = Liste.Kapitel[Liste.Kapitel.selectedIndex].value;
+	}
+	ManWahl(Kap);
+}
+
+function ResetKapitel() {
+	var Kap = 0;
+	with (parent.Info.document) {
+		var Bez = Liste.Kapitel[Liste.Kapitel.selectedIndex].text;
+		var temp = Bez.split("= ");
+		Zeiger -= eval(temp[1]);
+		Liste.Kapitel[Liste.Kapitel.selectedIndex].text = temp[0]+"= 0";
+		Kap = Liste.Kapitel[Liste.Kapitel.selectedIndex].value;
+	}
+	var a = ZeigerAnf[Kap];
+	var e = ZeigerEnd[Kap];
+		for (var i=a ; i<e; i++) {
+		bt[i].m = false;
+	}
+
+	ManuellZeigen(Kap);
+}
+
+function ManuellZeigen(Kap) {
+	var a = ZeigerAnf[Kap];
+	var e = ZeigerEnd[Kap];
+	var doc = parent.Details;
+
+	with(doc.document) {
+		open();
+		writeln(html_kopf("Man. Zeigen"));
+		write("<body>");
+		write("<FORM>");
+		writeln("<Input type=Button value='Dies Kapitel zur&uuml;cksetzen' onClick='parent.Index.ResetKapitel()'>");
+		writeln("<Input type=Button value='Alle Kapitel zur&uuml;cksetzen' onClick='parent.Index.ResetAll()'>");
+		write("<TABLE Cellspacing=0 cellpadding=2>");
+		for (var i=a ; i<e; i++) {
+			writeln("<TR valign=top><TD align='right'>"+(i-a+1)+" </TD><TD><Input type=checkbox name='x"+i+"'" +((bt[i].m) ? " CHECKED":"")+" onClick='javascript:parent.Index.AddFrage("+i+",this.checked);'> </TD><TD>"+bt[i].frage+"</TD></TR>");
+		}
+		write("</TABLE></FORM>");
+		close();
+	}
+}
+
+function AddFrage(Nr,check) {
+	bt[Nr].m = check;
+	if (check) Zeiger++; else Zeiger--;
+	NaviMsg(Zeiger+ " Frage"+((Zeiger!=1) ? "n":"")+" ausgew&auml;hlt");
+	with (parent.Info.document) {
+		var Bez = Liste.Kapitel[Liste.Kapitel.selectedIndex].text;
+		var temp = Bez.split("= ");
+		var x = eval(temp[1]) + ((check) ? 1:-1);
+		Liste.Kapitel[Liste.Kapitel.selectedIndex].text = temp[0]+"= "+x;
+//rem  NS 7.0 tut es nicht		Liste.Kapitel.text = temp[0]+"= "+x;
+//rem  								alert(Liste.Kapitel.text);
+//rem 		ManuellZeigen(Liste.Kapitel[Liste.Kapitel.selectedIndex].value);
+	}
+}
+
+function PrepAusdruck(form,Drucker) {
+	if (! Loading) {
+		AnzFragen = parseInt(form.Anzahl[form.Anzahl.selectedIndex].value);
+		if (nGemischt>1) {
+			var Zufall = new Array();
+			if ( nGemischt <= AnzFragen ) AnzFragen=nGemischt-1;
+			if (Manuell) {
+				Zufall = ManuellWaehlen();
+			} else {
+				Zufall = FragenWaehlen(nGemischt);
+			}
+			LetzteFrage = Math.min(Zufall.length,AnzFragen);
+			effFragen = LetzteFrage;
+			if (LetzteFrage > 0) {
+				for (var i = 0; i<LetzteFrage;i++) {
+					q[i+1] = bt[Zufall[i][1]];
+				}
+				Modus = 2;
+				Thema = "Gemischte Kapitel";
+				Lauf = 0;
+				if ( AnzFragen < 51) {
+					Ausdruck(Drucker);
+				} else {
+					if (Drucker) {
+						if (confirm("Wirklich "+AnzFragen+" Fragen ausdrucken lassen?\nDas gibt ca. "+Math.ceil(AnzFragen/7)+" Seiten Papier!")) Ausdruck(Drucker);
+					} else {
+						AnzFragen = 50;
+						alert("Mehr als 50 Fragen auf einmal\nwerden nicht ausgegeben");
+						Ausdruck(Drucker);
+					}
+				}
+			} else {
+				alert("Du bist perfekt");
+			}
+		} else {
+			alert("Mindestens ein Kapitel\nmuss ausgewaehlt sein");
+		}
+	} else {
+		Geduld();
+	}
+}
+
+function Geduld() {
+	alert("Bitte warte, bis\ndas Kapitel fertig geladen ist!");
+}
+
+function Lade(DateiName) {
+	var y =(DateiName.substring(5,7));
+	FfwFile = parseInt(y,10);
+	InfoMsg("<div>Kapitel <span class='rot'>"+Kapitel[FfwFile-1]+"</span> wird geladen. Bitte habe etwas Geduld ...");
+	Ampel("ffw_rot.htm");
+	window.setTimeout("Lade2('"+DateiName+"')",100);
+}
+
+function Lade2(DateiName) {
+	window.open(DateiName,"Steuer");
+}
+
+function delCookie() {
+	var leer = new Array;
+	if (confirm("Willst Du Deinen Ausbildungsstand\nwirklich loeschen lassen?")) {
+		if (confirm("Es wird Dich Wochen kosten um den Ausbildungsstand\nwieder aussagef&auml;hig zu bekommen\n\nWillst Du ihn wirklich loeschen lassen?")) {
+			CookieSchreiben("",-1);
+			Cookies = new Array();
+			for (var i=1;i<=Kapitel.length;i++) {
+				if (Vorhanden[i]) {
+					var nFragen = ZeigerEnd[i]- ZeigerAnf[i];
+					for (var j=1; j<=nFragen; j++) {
+						weak[i][j] = 23;
+					}
+				}
+			}
+			ErstStart("");
+		}
+	}
+}
+
+function RemoveCookie(CNr) {
+	if (confirm("Wirklich den Ausbildungsstand f&uuml;r\n"+Cookies[CNr]+"-Fragen l&ouml;schen lassen?")) CNr++;
+	ErfolgFenster.focus();
+}
+
+function setCookieAll() {
+	var d = new Date();
+	var Noten = "";
+	var Note = 23;
+	var alternative = "";
+	var Temp = "";
+	var Code = "";
+	var nFragen = 0;
+	var Beteiligt = new makeArray0(nKapitel);
+
+	for (var i=1;i<=LetzteFrage;i++){
+		Beteiligt[q[i].kap]++;
+	}
+	MischDatum =  d.getDate() + "." + (d.getMonth() +1 ) + "." + ((d.getYear() % 1900)+1900) ;
+	var kekse = Version+sep_1+Settings+sep_1+MischDatum;
+	for (var i=1;i<=Kapitel.length;i++) {
+		if (Cookies[i] == null) {  Cookies[i] = "";}
+		if (Beteiligt[i]>0) {
+			var Zeit = "";
+			if (Cookies[i] > "" ) {
+				Temp = Cookies[i].split(sep_1);
+				if (2 < Temp.length) {
+					Zeit = Temp[2];
+					if ('undefined' == Zeit || 'NaN.NaN.NaN' == Zeit) Zeit = "";
+				}
+			}
+			Noten = "";
+			alternative = "";
+			nFragen = ZeigerEnd[i]- ZeigerAnf[i];
+			for (var j=1; j<=nFragen; j++) {
+				Note = weak[i][j];
+				if (isNaN(Note)) Note = 23;
+				Code = 97+Note;
+				Noten += unescape("%"+Code.toString(16));
+				Code = 10+Note;
+				alternative += Code.toString(36);
+			}
+			if (Noten != alternative) alert(Noten+"\n"+alternative);
+			Cookies[i]=umlaute_zu_ae(Kapitel[i-1])+sep_1+Noten+sep_1+Zeit;
+		}
+	 	kekse += sep_0 + " " + Cookies[i];
+	}
+	if (false==CookieSchreiben(kekse,365 *3)) {
+	   alert("Das Cookie mit dem neuen Wissenstand wurde NICHT gespeichert");
+	}
+}
+
+function setCookie(FfwFile,Noten) {
+	var d = new Date();
+	var Zeit =  d.getDate() + "." + (d.getMonth() +1 ) + "." + ((d.getYear() % 1900)+1900) ;
+	var erfolg = false;
+
+
+
+
+		var kekse = Version+sep_1+Settings+sep_1+MischDatum;
+		for (var i=1;i<=Kapitel.length;i++) {
+			if (Cookies[i] == null) {
+				 Cookies[i] = "";
+			} else {
+				Cookies[i] = trim(Cookies[i]);
+			}
+			if (i==FfwFile) {
+				Cookies[i]=umlaute_zu_ae(Kapitel[i-1])+sep_1+Noten+sep_1+Zeit;
+			}
+	 		kekse += sep_0 + " " +Cookies[i];
+		}
+		erfolg = CookieSchreiben(kekse,365 *3);
+		if (!erfolg) {
+	   	if ("" == Noten) {
+		   	alert("Das Cookie mit den Einstellungen wurde NICHT gespeichert");
+		   } else {
+	   		alert("Das Cookie mit dem neuen Wissenstand wurde NICHT gespeichert");
+	   	}
+		}
+
+	return erfolg;
+}
+
+function getCookie(lastUser) {
+ 	var Inhalt = "";
+	var meineCookies = new Array();
+	meineUser = new Array();
+	var CookieLastUser = "lastUser."+CookieKlasse;
+	var Torte = document.cookie;
+	if ("" < Torte) {
+		var nCookies = document.cookie.split("; ");
+		if (nCookies.length) {
+			var j = 0;
+			for (var i = 0;i < nCookies.length;i++) {
+				if (0 == nCookies[i].indexOf(CookieKlasse)) {
+					meineCookies[j++] = nCookies[i].substr(CookieKlasse.length);
+				} else if ((""== lastUser) && (0 == nCookies[i].indexOf(CookieLastUser))) {
+					var MyUser  = nCookies[i].substr(CookieLastUser.length+1);
+					User = MyUser.replace(/_/g," ");
+				}
+			}
+		}
+	}
+
+	var MyUser = "";
+	if( 0 < meineCookies.length ) {
+  		for (var i = 0;i < meineCookies.length;i++) {
+  			var Abschnitt = meineCookies[i].split("=");
+		 	var nUser = meineUser.length;
+  			if (1 == meineCookies.length) {
+  				if ("" == Abschnitt[0]) {
+  					meineUser[nUser] = "";
+  				} else {
+					MyUser = Abschnitt[0].substr(1,Abschnitt[0].length-2);
+					meineUser[nUser] = MyUser.replace(/_/g," ");
+  				}
+  			} else {
+				if ("" < Abschnitt[0]){
+					MyUser = Abschnitt[0].substr(1,Abschnitt[0].length-2);
+					meineUser[nUser] = MyUser.replace(/_/g," ");
+				}
+  			}
+			if (User == meineUser[nUser]) {
+				Inhalt = Abschnitt[1];
+				if (-1 < MyUser.indexOf(" ")) {
+					if (CookieSchreiben(Inhalt,365*3)) {
+						KillCookie(CookieKlasse+"["+MyUser+"]");
+					}
+				}
+				if (Inhalt.indexOf("4.37") > -1) {
+					Inhalt = unescape(Inhalt);
+				}
+			}
+  		}
+  	}
+	return Inhalt;
+}
+
+function ReadCookie(User) {
+	var kekse = getCookie(User);
+	if (kekse != "") {
+		Cookies = kekse.split(sep_0);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function LeseCookie(Kap) {
+   var Gefunden = 0;
+	var Schwach = new Array;
+	var Gruppe = new Array;
+	var b = 0;
+
+
+	for (var i=1;i<=LetzteFrage;i++) Schwach[i]=23;
+	Unklar = LetzteFrage;
+
+	if (Cookies.length > 0 && Kap>0 && Kap <= nKapitel ) {
+		if(Cookies[Kap] > "  ") {
+			Gruppe = Cookies[Kap].split(sep_1);
+	   	Unklar =0;
+			var Jetzt = new Date();
+			var Tage = Jetzt.getTime();
+			var Damals = 0;
+			var TageDiff = 0;
+			var Zeitstrafe = 0;
+			if (Gruppe.length  > 2) {
+			   if (0 < Gruppe[2].indexOf(".")) {
+					Damals = leseDatum(Gruppe[2]);
+					TageDiff = Math.floor((Tage-Damals)/1000/86400);
+					if (TageDiff > 99 && TageDiff < 365 * 5) {
+						var KapitelName =umlaute_zu_ae(Kapitel[Kap-1]);
+						if (confirm("Du hast zuletzt vor "+TageDiff+ " Tagen im Kapitel '"+KapitelName+"' geuebt\n\nWenn Du auf [OK] klickst, werde ich\nalle Noten um eine Note verschlechtern")) Zeitstrafe=1;
+					}
+				}
+			}
+
+			if (Gruppe.length > 1) {
+				var Noten = Gruppe[1];
+				if (Noten.length == LetzteFrage) {
+
+					Unklar = 0;
+					for (var i=1;i<=LetzteFrage;i++) {
+						b = Noten.charCodeAt(i-1)-97;
+						if (b == 23) {
+							Schwach[i] = b;
+						} else {
+							Schwach[i] = Math.max(0,Math.min(Noten.charCodeAt(i-1)-97+Zeitstrafe,9));
+						}
+						if (Schwach[i] > 0) { Unklar++; }
+					}
+				}
+			}
+	   }
+	}
+	weak[Kap] = Schwach;
+}
+
+function formatDatum(d) {
+	return 	d.getDate() + "." + (d.getMonth() +1 ) + "." + ((d.getYear() % 1900)+1900) ;
+}
+
+function leseDatum(Datum) {
+	var TMJ = Datum.split(".");
+	if ( 3 == TMJ.length) {
+		return new Date( parseInt(TMJ[2]),parseInt(TMJ[1])-1,parseInt(TMJ[0]));
+	} else {
+	   return new Date(1999,11,31);
+	}
+}
+
+function juenger(Datum1,Datum2) {
+	var days1 = leseDatum(Datum1);
+	var days2 = leseDatum(Datum2);
+	if (days1 > days2) {
+		return 	formatDatum(days1);
+	} else {
+		return 	formatDatum(days2);
+	}
+}
+
+function exportCookie() {
+	Ampel("ffw_rot.htm");
+   InfoMsg("<div class='kopf'>Ausbildungsstand exportieren</div>");
+	open("export.htm","Details");
+}
+
+function exportCookie2() {
+	var doc = parent.Details;
+	var kekse = "";
+	var nCookies = document.cookie.split("; ");
+	var prz = 0;
+	if (nCookies.length) {
+
+		for (var i = 0;i < nCookies.length;i++) {
+			if (0 == nCookies[i].indexOf(CookieKlasse+"["+User.replace(/ /g,"_")+"]")) {
+				kekse = nCookies[i];
+				for (var z = 0; z < kekse.length;z++){
+					prz += kekse.charCodeAt(z)*(z % 10 +1);
+				}
+				kekse += "=" + prz.toString();
+				with(doc.document.Export) {
+					cookie.value = kekse;
+					cookie.focus();
+					cookie.select();
+				}
+			}
+		}
+	}
+	Ampel("ffw_grn.htm");
+}
+
+function selectExport() {
+	var doc = parent.Details;
+	with (doc.document.forms) {
+		Export.cookie.focus();
+		Export.cookie.select();
+	}
+}
+
+function importCookieForm(mode) {
+  if (0 == mode) {
+	  InfoMsg("<div class='kopf'>Ausbildungsstand importieren</div>");
+  	  open("import.htm","Details");
+  } else {
+    InfoMsg("<div class='kopf'>Ausbildungsst&auml;nde einlesen</div>");
+  	 open("import2.htm","Details");
+  }
+}
+
+function importCookie() {
+
+	var ok = true;
+	var doc = parent.Details;
+	var prz = 0;
+	var eingabe = doc.document.forms.Import.cookie.value;
+	var bestof  = doc.document.forms.Import.bestof[0].checked;
+	var einst   = doc.document.forms.Import.einst[0].checked;
+	if (0 == eingabe.indexOf(CookieKlasse+"["+User.replace(/ /g,"_")+"]")) {
+		var Abschnitt = eingabe.split("=");
+		if (3 != Abschnitt.length) {
+			alert("Die Daten sind nicht vollstaendig in das\nEingabefeld eingefuegt worden!");
+		} else {
+		   var kekse = Abschnitt[0]+"="+Abschnitt[1];
+			for (var z = 0; z < kekse.length;z++){
+					prz += kekse.charCodeAt(z)*(z % 10 +1);
+			}
+			if (prz.toString() == Abschnitt[2]) {
+				if (true == bestof) {
+					var neu = Abschnitt[1].split(sep_0);
+					var Zeit = "";
+					var Gruppe = neu[0].split(sep_1);
+					if (2 < Gruppe.length) {
+						Zeit = Gruppe[2];
+						if ('undefined' == Zeit || 'NaN.NaN.NaN' == Zeit) Zeit = "";
+					}
+
+					kekse  = Version+sep_1;
+					kekse += (true == einst) ? Gruppe[1]:Settings;
+					kekse += sep_1+juenger(MischDatum,Zeit);
+
+					for (var i=1;i<=Kapitel.length;i++) {
+						var CookieAkt = "";
+						var CookieImp = "";
+						var ZeitAlt = "";
+						var ZeitNeu = "";
+						if (i < Cookies.length) {
+							CookieAkt = (-1 < Cookies[i].indexOf(sep_1)) ? Cookies[i].split(sep_1):"";
+							if (2 < CookieAkt.length) {
+								if ('undefined' != CookieAkt[2] && 'NaN.NaN.NaN' != CookieAkt[2]) ZeitAlt = CookieAkt[2];
+							}
+						}
+						CookieImp = (-1 <  neu[i].indexOf(sep_1)) ?     neu[i].split(sep_1):"";
+						if (2 < CookieImp.length) {
+							if ('undefined' != CookieImp[2] && 'NaN.NaN.NaN' != CookieImp[2]) ZeitNeu = CookieImp[2];
+						}
+
+
+						if (2 > CookieImp.length) {
+							neu[i] = ("" < CookieAkt) ? trim(Cookies[i]):"";
+						} else if (2 > CookieAkt.length){
+
+						} else {
+							var keks = umlaute_zu_ae(Kapitel[i-1])+sep_1;
+							for (var f=0;f < CookieImp[1].length;f++){
+								if (CookieImp[1].charAt(f) < CookieAkt[1].charAt(f)) {
+									keks += CookieImp[1].charAt(f);
+								} else {
+									keks += CookieAkt[1].charAt(f);
+								}
+							}
+							neu[i] = keks + sep_1+ juenger(ZeitAlt,ZeitNeu);
+						}
+						kekse += sep_0 + " " + neu[i];
+					}
+				} else {
+					ok = confirm ('Ich frage zum letzten Mal: Wirklich\nalle alten Noten durch die neuen ersezten');
+					var kekse = Abschnitt[1];
+				}
+				if (ok) {
+					if (CookieSchreiben(kekse,365 *3)) {
+						alert("Die Daten wurden erfolgreich uebernommen");
+						ErstStart(User);
+						InfoWindow = 0;
+						ZeigeEinleitung();
+					} else {
+						alert("Die Daten wurden NICHT uebernommen");
+						ok = false;
+					}
+				}
+			} else {
+				alert("??? Wurden die Daten manipuliert ???\nIch habe NICHTS uebernommen!");
+				ok = false;
+			}
+		}
+	} else {
+		if ("" == trim(eingabe)) {
+			alert("Das Eingabefeld ist leer");
+		} else {
+			alert("Die Benutzer-Namen stimmen nicht ueberein!");
+		}
+		ok = false;
+	}
+	return ok;
+}
+
+function importVorschau() {
+
+	var doc = parent.Details;
+	var prz = 0;
+	var eingabe = doc.document.forms.Import.cookie.value;
+	var bestof  = doc.document.forms.Import.bestof[1].checked;
+	var einst   = doc.document.forms.Import.einst[0].checked;
+	if (0 == eingabe.indexOf(CookieKlasse+"["+User.replace(/ /g,"_")+"]")) {
+		var Abschnitt = eingabe.split("=");
+		if (3 != Abschnitt.length) {
+			alert("Die Daten sind nicht vollstaendig in das\nEingabefeld eingefuegt worden!");
+		} else {
+		   var kekse = Abschnitt[0]+"="+Abschnitt[1];
+			for (var z = 0; z < kekse.length;z++){
+					prz += kekse.charCodeAt(z)*(z % 10 +1);
+			}
+			if (prz.toString() == Abschnitt[2]) {
+				var CookiesImp = Abschnitt[1].split(sep_0);
+
+
+
+
+ 			}
+		}
+	}
+}
+
+function importCookieAll() {
+
+	var doc = parent.Details;
+	var eingabe = new Array();
+	eingabe = trim(doc.document.forms.Import.gesamt.value);
+	if ("" < eingabe) {
+		nUser = 0;
+		var kamerad = eingabe.split("\n");
+		for (var i = 0; i < kamerad.length;i++) {
+			var prz = 0;
+   		var Details = kamerad[i].split("=");
+			var kekse = Details[0]+"="+Details[1];
+			for (var z = 0; z < kekse.length;z++){
+				prz += kekse.charCodeAt(z)*(z % 10 +1);
+			}
+			if (prz.toString() == Details[2]) {
+				var temp = Details[0].split("[");
+				var aktUser = temp[1].substring(0,temp[1].length-1);
+				var neu = Details[1].split(sep_0);
+				temp = neu[0].split(":");
+				var neuMischDatum = temp[2];
+				kameraden[nUser] = aktUser;
+				wissen[nUser] = new Array();
+				for (var kap=1;kap<=Kapitel.length;kap++) {
+					wissen[nUser][kap] = new Array();
+					if (-1 < neu[kap].indexOf(sep_1)) {
+						var Summen = new Array(24);
+						for (var j = 0;j<24;j++) {
+							Summen[j] = 0;
+						}
+						var CookieImp = neu[kap].split(sep_1);
+						for (var f=0;f < CookieImp[1].length;f++){
+							var w = CookieImp[1].charCodeAt(f)-97;
+							wissen[nUser][kap][f+1] = w;
+
+							Summen[w]++;
+						}
+						wissen[nUser][kap][0] = Summen;
+					}
+				}
+				nUser++;
+
+			} else {
+				alert("!!! Die Daten fuer "+aktUser+"\nwurden manipuliert !!!");
+			}
+		}
+	} else {
+		alert("Das Eingabefeld war leer");
+	}
+
+	if (nUser > 0 ) {
+	   InfoMsg("<div class='kopf'>Ausbildungsstand &Uuml;bersicht</div>");
+		with(doc.document) {
+			open();
+			writeln(html_kopf(""));
+			write("<body>");
+			writeln("<table border='1' cellspacing='0' cellpadding='1'><tr><th>Kapitel</th>");
+			for (var kollege = 0; kollege < nUser;kollege++){
+				writeln("<th>"+kameraden[kollege]+"</th>");
+			}
+			writeln("</tr>");
+			for (var kap=1;kap <= Kapitel.length;kap++) {
+				writeln("<tr><td>"+Kapitel[kap-1]+"</td>");
+				for (var kollege = 0; kollege < nUser;kollege++){
+
+
+					   writeln("<td>"+CalcGrafik(wissen[kollege][kap].length,wissen[kollege][kap][0],100)+"</td>");
+
+
+
+				}
+				writeln("</tr>");
+			}
+			writeln("</table></body></html>");
+			close();
+		}
+	}
+}
+
+function Ausbildungsstand() {
+	if (OpenFenster("Ausbildungsstand",120,50,700,Math.max(235+Kapitel.length*25,410))) {
+		var Erfolg = Lernerfolg(ErfolgFenster,-1);
+		EndFenster();
+		if (Erfolg==nKapitel && !Urkunde[0] && !Meister ) {
+			EineUrkunde(0);
+			Urkunde[0] = true;
+		} else {
+			if ((Erfolg+nKapitel) == 0 && !Meister ) EineUrkunde(-1);
+			Meister = true;
+		}
+	} else {
+		BrowserProbleme();
+	}
+}
+
+function BrowserProbleme() {
+	alert ("Problem beim Fenster oeffnen!\n\nSchliesse mal Deinen Browser\nund starte ihn nochmal neu");
+}
+
+function OpenFenster(Titel,x,y,b,h) {
+
+	if (ErfolgFenster) {	if (!ErfolgFenster.closed) { ErfolgFenster.close(); } }
+
+	ErfolgFenster = open("","MyFenster","toolbar=no,menubar=no,status=no,scrollbars=yes,resizable=yes,width="+String(b)+",height="+String(h));
+	if (!ErfolgFenster) {
+		return false;
+	} else {
+		ErfolgFenster.moveTo(x,y);
+		with (ErfolgFenster.document) {
+
+			writeln(html_kopf(Titel)+"<body>");
+		}
+		return true;
+	}
+}
+
+function EndFenster() {
+	var d = new Date();
+   var Minuten = d.getMinutes();
+   var NachVoll  = ((Minuten < 10) ? ":0" : ":");
+	var Zeit = "Stand: " + d.getDate() + "." + (d.getMonth() +1 ) + "." + ((d.getYear() % 1900)+1900) + " um " + d.getHours() + NachVoll + Minuten + " Uhr";
+
+	with (ErfolgFenster.document) {
+		writeln("<FORM><INPUT NAME='Abbruch' TYPE='Button' value='Fenster schliessen' onClick='window.self.close();'>");
+		writeln("<INPUT NAME='Ausdruck' TYPE='Button' value='Drucken' onClick='window.self.print();'>");
+		if (Cookies.length > 0 ) writeln("<INPUT NAME='Kill' TYPE='Button' value='L&ouml;schen' onClick='opener.parent.Index.delCookie();'>");
+		writeln(Zeit);
+		write("</FORM><HR><div class='klein'>&copy; 2008 HLFS + M.Altenhein Version "+Version+" Internet: <A HREF='http://www.alraft.de/altenhein/fragebogen/'>http:/www.alraft.de/altenhein/fragebogen/</A></div>");
+		writeln("</body></html>");
+		close();
+	}
+	ErfolgFenster.focus();
+}
+
+function Lernerfolg(doc,Mode) {
+	var Schwach = new Array;
+	var Gruppe = new Array;
+	var Noten = "";
+	var nFragen = 0;
+	var tUnklar =0;
+	var Grafik = "";
+	var Note,tNote = 0;
+	var Link = "";
+	var Bild = "";
+	var Summen=new makeArray0(23);
+	var nFragenView = "";
+	var NoteView = "";
+	var Erfolg = 0;
+	var Diplom = "";
+	var RotesKreuz = "<img src='kreuz.gif' width=13 height=18 alt='Klicke fuer mehr Informationen' border=0>";
+
+	if (Mode==-1) {
+		akt_user();
+		var Anrede = ("" < User) ? " f&uuml;r <span style='color:red;'>"+User+"</span>":"";
+		with (doc.document) {
+			writeln("<H3>Ausbildungsstand"+Anrede+"</H3>");
+			writeln("<TABLE CELLPADDING=0 CELLSPACING=0 BORDER=0><TR valign=top><TD>");
+			writeln("<TABLE CELLPADDING=2 CELLSPACING=0 BORDER=1 BGCOLOR=WHITE>");
+			writeln("<TR BGCOLOR='#CCCCCC'><TH align='left'>Kapitel</TH><TH>Fragen</TH><TH>Note</TH><TH>&nbsp;</TH><TH>Wissensstand</TH><TH>Letzter Tag</TH></TR>");
+		}
+	}
+
+	var j = (Mode == -1) ? 1:FfwFile;
+	var k =(Mode == -1) ? nKapitel:FfwFile;
+   tnFragen = 0;
+
+	for (var i=j;i<=k;i++) {
+
+		var Zeugnis =new makeArray0(23);
+		nFragen = 0;
+		Note = -1;
+		Unklar = 0;
+		if (Cookies.length>=i) {
+
+			if (Cookies[i] != null) {
+				Gruppe = Cookies[i].split(sep_1);
+				Noten = Gruppe[1];
+				if (Noten > "" ) {
+					Note = 0;
+
+					nFragen = Noten.length;
+      			for (var j=1;j<=nFragen;j++) {
+						var w = Noten.charCodeAt(j-1)-97;
+						Note += (w==23) ? 4:w;
+						Zeugnis[w]++;
+						Summen[w]++;
+						if (w>2) Unklar++;
+	   			}
+					if (Note < 2) Erfolg++;
+				} else {
+					Gruppe[2] = "&nbsp;";
+				}
+			}
+		}
+
+		if (Mode == -1) {
+			Bild = CalcGrafik(nFragen,Zeugnis,120);
+			var damals = "&nbsp;";
+			if (3 == Gruppe.length) {
+				var TMJ = Gruppe[2].split(".");
+				if (3 == TMJ.length ) {
+					if ("2001" < TMJ[2]) damals = Gruppe[2];
+				}
+			}
+			nFragenView = ((nFragen>0) ? nFragen:"??");
+			NoteView = ((nFragen>0) ? String(Math.round(Note/nFragen*5)/10+1):"&nbsp;");
+			if (NoteView.length ==1) NoteView += ".0";
+			var Bunt = (FfwFile > 0 && Gruppe[0] == FfwFile && Modus ==1) ? " BGCOLOR='Yellow'>":">";
+
+			Diplom = "<img src='p.gif' width=13 height=18 alt='' align='left' border=0>";
+			if (nFragen > 0 ) {
+				if (Note==0) {
+
+					Diplom = "<img src='smed.gif' width='13' height='18' alt='Urkunde' align='left' border='0' onClick='opener.EineUrkunde("+i+");'>";
+				} else {
+					if (FfwFile == i || Vorhanden[i]) {
+						Diplom = "<A HREF='javascript:opener.ErsteHilfe("+i+",0);'>"+RotesKreuz+"</A>";
+					}
+				}
+			}
+			doc.document.writeln("<TR><TD"+Bunt+Kapitel[i-1]+"</TD><TD align='right'"+Bunt+nFragenView+"</TD><TD align=Center"+Bunt+NoteView+"</TD><TD align=center>"+Diplom+"</TD><TD>"+Bild+"</TD><TD align='right'>"+damals+"</TD></TR>");
+			tUnklar += Unklar;
+			tnFragen += nFragen;
+			tNote += Note;
+		} else {
+			Bild = CalcGrafik(nFragen,Zeugnis,100);
+			with(doc.document) {
+				writeln("<TABLE border='1' cellspacing='0' cellpadding='2'><TR>");
+				if (Note ==0) {
+					writeln("<TD><a href=\"javascript:parent.Index.EineUrkunde("+FfwFile+");\"><img src='smed.gif' width=13 height=18 alt='' border=0></A></TD>");
+				} else {
+					writeln("<TD><a href=\"javascript:parent.Index.ErsteHilfe("+FfwFile+",0);\">"+RotesKreuz+"</TD>");
+				}
+				writeln("<TD>"+Bild+"</TD></TR></TABLE>");
+			}
+		}
+	}
+
+	if (Mode==-1) {
+		Bild = CalcGrafik(tnFragen,Summen,120);
+		nFragenView = ((tnFragen>0) ? tnFragen:"??");
+		NoteView = ((tnFragen>0) ? String(Math.round(tNote/tnFragen*5)/10+1):"&nbsp;");
+		if (NoteView.length ==1) NoteView += ".0";
+		Diplom = "<img src='p.gif' width=13 height=18 alt='' align='left' border=0>";
+		if (Erfolg == nKapitel) {
+			Diplom = "<A HREF='javascript:opener.EineUrkunde("+((tNote==0) ? -1:0 )+");'><img src='"+((tNote==0) ?"g":"s")+"med.gif' width=13 height=18 alt='Urkunde' align='left' border=0></A>";
+		} else {
+			if (tnFragen > 0 && nGemischt > tnFragen ) {
+				var Rest = 50;
+				var x=9;
+				while (Rest > 0 && x > 0) {
+					Rest -=Summen[x--];
+				}
+				if (Rest < - 50) x++;
+				Diplom = "<A HREF='javascript:opener.ErsteHilfe(0,"+Math.min(x,8)+");'>"+RotesKreuz+"</A>";
+			}
+		}
+		with (doc.document) {
+			var damals = "&nbsp;";
+			var TMJ = MischDatum.split(".");
+			if (3 == TMJ.length ) {
+				if ("2001" < TMJ[2]) damals = MischDatum;
+			}
+ 			write("<TR BGCOLOR='#CCCCCC'><TD>Gesamt:</TD><TD align='right'>"+nFragenView+"</TD><TD align=Center>"+NoteView+"</TD><TD align=center>"+Diplom+"</TD><TD>"+Bild+"</TD><TD align='right'>"+damals +"</TD></TR>");
+			writeln("</TABLE></TD><TD><img src='p.gif' width=30 height=1 alt=''></TD><TD>");
+			writeln("<TABLE CELLPADDING=2 CELLSPACING=0 BORDER=1><TR BGCOLOR='#CCCCCC'><TH colspan=2>Legende</TH></TR>");
+			Legende(doc,"pg.gif","Perfekt","0 Punkte");
+			Legende(doc,"pd.gif","Gut","1-2 Punkte");
+			Legende(doc,"py.gif","Befriedigend","3 Punkte");
+			Legende(doc,"pr.gif","Unsicher","4-5 Punkte");
+			Legende(doc,"pp.gif","Probleme","6-7 Punkte");
+			Legende(doc,"ps.gif","Mangelhaft","8-9 Punkte");
+			Legende(doc,"pf.gif","Noch nie","abgefragt");
+			writeln("</TD></TR></TABLE>");
+			writeln("<P><A HREF='javascript:opener.BewertungsRegeln();'>Bewertungs-<BR>Regeln</A></p>");
+			writeln("</TD></TR></TABLE>");
+			if (Cookies.length==null) {
+				ErfolgFenster.resizeBy(0,40);
+				writeln("<P>Es sind noch keine Daten gespeichert. Rufe ein beliebiges Kapitel auf und gehe die Fragen mindestens einmal durch. Im Anschlu&szlig; daran kannst Du Dir dann die ersten Ergebnisse anschauen.");
+			}
+		}
+	}
+	return (tNote==0&&Note==0) ? -Erfolg:Erfolg;
+}
+
+function CalcGrafik(gesamt,z,Breite) {
+	var Grafik = "";
+
+	if (gesamt > 0) {
+		var erg= new Array();
+		var width = new Array();
+		var hg = new Array("pf","ps","pp","pr","py","pd","pg");
+		var texte = new Array("noch nie abgefragt","Ich sehe schwarz","Probleme","unsicher","befriedigend","gut","perfekt");
+
+		erg[0] = z[23];
+		erg[1] = z[8]+z[9];
+		erg[2] = z[6]+z[7];
+		erg[3] = z[4]+z[5];
+		erg[4] = z[3];
+		erg[5] = z[1]+z[2];
+		erg[6] = z[0];
+
+		for (var i = 0; i < erg.length;i++) {
+			width[i] = Math.round(erg[i]/gesamt*Breite);
+			if (0 < width[i] ) {
+				var altText = erg[i].toString() + " x " + texte[i];
+				Grafik += "<img src='"+hg[i]+".gif' width='"+width[i]+	"' height='20' alt='"+altText+"' title='"+altText+"'>";
+			}
+		}
+
+	} else {
+		Grafik = "<img src='pf.gif' width="+Breite+" height=20 alt='noch nie abgefragt' title='noch nie abgefragt'>";
+	}
+	return Grafik;
+}
+
+
+function Legende(doc,bild,text,punkte) {
+	doc.document.writeln("<TR><TD><img src='"+bild+"' border=1 width=20 height=20 alt=''></TD><TD><FONT Size=1>"+text+"<BR>"+punkte+"</FONT></TD></TR>");
+}
+
+function BewertungsRegeln() {
+	if (AusgabeFenster) if (!AusgabeFenster.closed) AusgabeFenster.close();
+	AusgabeFenster = open("ffw_bew.htm","Bewertungsregeln","toolbar=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=480");
+	if(AusgabeFenster) {
+		AusgabeFenster.moveTo(160,100);
+		AusgabeFenster.focus();
+	} else {
+		BrowserProbleme();
+	}
+}
+
+function EineUrkunde(i) {
+	if (i>0) {
+		ShowUrkunde('white','','In dem Kapitel<h1>'+Kapitel[i-1]+'</h1>bist Du perfekt!');
+	} else {
+		if (i==0) {
+			ShowUrkunde("#e0e0e0","","Du bist in<h1>allen "+nKapitel+" Kapiteln</h1>perfekt!");
+		} else {
+			ShowUrkunde("gold","Ehren-","Du bist einsame Spitze und<h1>in allen "+nKapitel+" Kapiteln</h1><B>absolut perfekt!</B>");
+		}
+	}
+}
+
+function ShowUrkunde(fg,t0,t1) {
+	var d = new Date();
+	var Heute =  d.getDate() + "." + (d.getMonth() +1 ) + "." + ((d.getYear() % 1900)+1900) ;
+	var Flag = (t0 >"");
+   var Hoehe = (Flag) ? 500:390;
+   var Anrede = (""<Nickname) ? "f&uuml;r <span style='font: normal bold 130% \"Comic Sans MS\",cursive;'>"+Nickname+"</span><br>":"";
+   Hoehe += ("" < Nickname) ? 30:0;
+
+	if (AusgabeFenster) if (!AusgabeFenster.closed) AusgabeFenster.close();
+	AusgabeFenster = open("","Urkunde",("toolbar=no,menubar=no,scrollbars=yes,resizable=yes,width=390,height="+Hoehe+""));
+	if (AusgabeFenster) {
+		AusgabeFenster.moveTo(screen.width/2-390/2,120);
+		with (AusgabeFenster.document) {
+			open();
+			writeln(html_kopf("Urkunde"));
+			writeln("<body>");
+			writeln("<div align=center><table width='350' border=1 cellspacing=0 cellpadding=5 bgcolor='"+fg+"'><TR><TD align=center>");
+			if (Flag) {
+				 writeln("<span style='font-size:50px;font-weight:bold;'>"+t0+"</span>");
+
+			}
+			writeln("<img src='urkunde.gif' width=270 height=45 alt='Urkunde' vspace=10><BR clear=all>");
+			writeln(Anrede+t1+"<h2>Herzlichen Gl&uuml;ckwunsch!</h2><P>Waldeck-Alraft, den "+Heute+"<BR>Manfred Altenhein<br> </td></tr></table>");
+			writeln("<FORM><INPUT NAME='Ausdruck' TYPE='Button' value='Drucken' onClick='window.self.print();'>&nbsp;<INPUT NAME='Abbruch' TYPE='Button' value='Fenster schliessen' onClick='window.self.close();'></FORM>");
+			writeln("</div></body></html>");
+			close();
+		}
+		AusgabeFenster.focus();
+		Urkunde[0] = true;
+	} else {
+		BrowserProbleme();
+	}
+}
+
+
+function Fehlerbehandlung (Nachricht, Datei, Zeile) {
+  Fehler = "Fehlermeldung:\n" + Nachricht + "\n\nDatei: " + Datei + "\nZeile:" + Zeile;
+  alert(Fehler);
+  return true;
+}
+
+function ErstStart(User) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   var param = parent.location.search;
+   if ("" < param) {
+   	if ("?test" == param) entwickler=true;
+   	if ("?fehler" == param) window.onerror = Fehlerbehandlung;
+   }
+	if (ReadCookie(User)) {
+		LeseSettings();
+	} else {
+		SaveOpt();
+	}
+	clearKapitel();
+	if (""== User) {
+		InfoMsg(Angepasst("Feuerwehr-Fragebogen"));
+		Ampel("ffw_grn.htm");
+		window.setTimeout("akt_user()",2000);
+	}
+}
+
+function NewsLetter() {
+	if (window.location.protocol == "http:") {
+		OpenFenster("Newsletter",120,200,550,290);
+		if (ErfolgFenster) {
+			with (ErfolgFenster.document) {
+				writeln("<BASE TARGET='_self'>");
+				writeln("<H3>Newsletter anfordern</H3><form action='../cgi-bin/ffw_nl.pl' method='put' name='NewsLetter'>");
+				writeln("Wenn Du <b>automatisch</b> &uuml;ber &Auml;nderungen, Korrekturen und Updates informiert werden willst, trage hier Deine E-Mail-Adresse ein:<P>");
+            		writeln("<input type='text' size='30' maxlength='80' name='email'>");
+				writeln("<input type='submit' name='Senden' value='Newsletter anfordern'><P>Du bekommst auf jeden Fall eine <b>Best&auml;tigung</b> per E-Mail. Wenn diese E-Mail nicht <b>innerhalb eines Tages</b> ankommt, hast Du Deine Adresse falsch angegeben. Erst wenn Dir die Best&auml;tigung vorliegt, kannst Du sicher sein, den Newsletter wirklich zu erhalten</form>");
+				writeln("<FORM><INPUT NAME='Abbruch' TYPE='Button' value='Fenster schliessen' onClick='window.self.close();'></FORM>");
+				writeln("</body></html>");
+				close();
+			}
+			ErfolgFenster.focus();
+		} else {
+			BrowserProbleme();
+		}
+	} else {
+		alert("Newsletter\n\nUm den Newsletter anzufordern\nmusst Du diese Seite online aufrufen!");
+	}
+}
+
+function ErsteHilfe(k,Grenzwert) {
+	var Anrede = ("" < User) ? "<span style='color:#080;'>"+User+"</span>, ":"";
+	if (AusgabeFenster) if (!AusgabeFenster.closed) AusgabeFenster.close();
+	AusgabeFenster = open("","ProblemFragen","toolbar=no,menubar=no,scrollbars=yes,resizable=yes,width=750,height=550");
+	if (AusgabeFenster) {
+		AusgabeFenster.moveTo(100,100);
+		with (AusgabeFenster.document) {
+			open();
+			writeln(html_kopf('Die Fragen mit dem meisten &Uuml;bungsbedarf'));
+			writeln("<body>");
+			var e = new Array;
+			var bild = ["pg","pd","pd","py","pr","pr","pp","pp","ps","ps"];
+			bild[23] = "pf";
+			var j = 0;
+			var z=1;
+			var p=0;
+			var p,n,m =0;
+			var TabTeil = "";
+			if (k>0) {
+				if (Modus==1 && k==FfwFile) {
+					for (var i=1;i<=LetzteFrage;i++) {
+						if (weak[k][i] > Grenzwert ) e[j++] = [weak[k][i] - i/1000, q[i].pos, q[i].frage];
+					}
+				} else {
+					for (var i=ZeigerAnf[k];i<ZeigerEnd[k];i++) {
+						if (weak[k][z] > Grenzwert ) e[j++] = [weak[k][z] - i/1000, bt[i].pos, bt[i].frage];
+						z++;
+					}
+				}
+			} else {
+				for (var i=1;i<nGemischt;i++) {
+					n = bt[i].kap;
+					m = bt[i].pos;
+					p = weak[n][m];
+					if ( p !=23 && p > Grenzwert ) e[j++] = [p - i/1000, m, bt[i].frage,n];
+				}
+				TabTeil = "</TD><TD align=center><B>Kapitel</B>";
+			}
+			if (e.length > 0 ) {
+				writeln("<H3>"+Anrede+"Du hast noch "+((e.length!=1) ? e.length:"eine")+" Problem-Frage"+((e.length!=1) ? "n ":" "));
+				if (k>0) {
+					write("im Kapitel: <font color=red>"+Kapitel[k-1]+"</font>");
+				} else {
+					if (Grenzwert > 0) write("mit mehr als "+Grenzwert + " Punkten");
+				}
+				writeln("</H3>");
+				writeln("<table width='95%' border=1 cellspacing=0 cellpadding=5><TR bgcolor='#e0e0e0'><TD align=center><B>Punkte</B>"+TabTeil+"</TD><TD align=center><B>Nr</B></TD><TD><B>Frage</B></TD></TR>");
+
+				e.sort(Desc);
+				for (var i=0;i<e.length;i++) {
+					p = Math.ceil(e[i][0]);
+					writeln("<TR><TD align=center background='"+bild[p]+".gif'><font color=#"+((p==3||p==23) ? "000000":"FEFEFE" )+"><B>"+((p==23) ? "?":p)+"</B></font></TD>");
+					if (k==0) writeln("<TD align=center>"+Kapitel[e[i][3]-1]+"</TD>");
+					writeln("<TD align='right'>"+e[i][1]+"</TD><TD>"+e[i][2]+"</TD></TR>");
+				}
+				writeln("</TABLE>");
+			} else {
+				writeln("<H3>"+Anrede+"Du hast keine Problem-Fragen mit mehr als "+((Grenzwert!=1) ? Grenzwert + " Punkten":"einem Punkt"));
+			}
+			writeln("<FORM><INPUT NAME='Abbruch' TYPE='Button' value='Fenster schliessen' onClick='window.self.close();'>&nbsp;<INPUT NAME='Ausdruck' TYPE='Button' value='Drucken' onClick='window.self.print();'></FORM>");
+			writeln("</body></html>");
+			close();
+		}
+	}
+
+}
+
+function SetLastUser(name) {
+		var d = new Date();
+		var CookieName = "lastUser." +CookieKlasse;
+		var kuchen = CookieName +"=" + name.replace(/ /g,"_");
+		d.setTime(d.getTime() + (86400 * 1000 * 365 * 3));
+		document.cookie = kuchen + "; expires=" + d.toGMTString() +  "; path=/";
+		return (-1 < document.cookie.indexOf(kuchen));
+}
+
+function KillCookie(CookieName) {
+	var d = new Date();
+	d.setTime(d.getTime() + (86400 * 1000 * -1));
+	var bisher = document.cookie;
+	document.cookie = CookieName +"=; expires=" + d.toGMTString() +  "; path=/";
+	var neu = document.cookie;
+   return (neu.indexOf(CookieName));
+}
+
+//rem  unterprogramme
+
+function radio(name,wert,x){
+	var checked = (x) ? " checked":"";
+	return "<input type='radio' name='"+name+"' value='"+wert+"'"+checked+">";
+}
+
+function checkbox(name,wert,x){
+	var checked = (x) ? " checked":"";
+	return "<input type='checkbox' name='"+name+"' value='"+wert+"'"+checked+">";
+}
+
+</SCRIPT>
+</HEAD>
+
+<body style='background:#fff7de url(heft24.gif) repeat-y -20px 0px;' onLoad=ErstStart("");>
+<BASE TARGET="Details">
+<div id='Nav'>
+<FONT SIZE=-1>	
+<h3 class='links'>Men&uuml;</h3>
+<A HREF="javascript:parent.Index.ZeigeEinleitung();">Startseite</A><BR>
+<A HREF="javascript:parent.Index.Ausbildungsstand();">Ausbildungsstand</A><BR>
+<A HREF="javascript:parent.Index.Einstellungen();">Einstellungen</A><BR>
+<div id='needCookie'><A HREF="javascript:parent.Index.Benutzer();">Benutzerverwaltung</A></div>
+<h3 class='links'>Fragen</h3>
+<div class='mischen'><A HREF="javascript:parent.Index.Formular();">Fragen mischen</A></div>
+<A HREF="javascript:parent.Index.Lade('ffw_k01.htm');">ABC-Gefahrstoffe</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k02.htm');">Atemschutz</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k03.htm');">Zivilschutz</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k04.htm');">BSD</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k05.htm');">Brennen</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k06.htm');">Fahrzeugkunde</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k07.htm');">Ger&auml;te TH</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k08.htm');">Katastrophenschutzes</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k09.htm');">Hygiene</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k10.htm');">Erste Hilfe</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k11.htm');">L&ouml;scheinsatz</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k12.htm');">L&ouml;schen</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k13.htm');">Schlauchkunde</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k14.htm');">Pers. Ausr&uuml;stung</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k15.htm');">Phy. u. psy. Belastung</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k16.htm');">Rechtsgrundlagen</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k17.htm');">Rettung</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k18.htm');">Rettungsger&auml;te</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k19.htm');">Sonstige Ger&auml;te</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k20.htm');">Sprechfunk</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k21.htm');">TH</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k22.htm');">UVV</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k23.htm');">Verhalten bei Gefahr</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k24.htm');">Wasserf&ouml;rderung</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k25.htm');">Spezial_5</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k26.htm');">Spezial_1</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k27.htm');">Spezial_2</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k28.htm');">Spezial_3</A><BR>
+<A HREF="javascript:parent.Index.Lade('ffw_k29.htm');">Spezial_4</A><BR>
+
+
+<script type="text/javascript">
+	document.writeln("<P><small>&copy;HLFS + M.Altenhein + Aktualisiert von Andi M.<BR>Version: "+Version+"/Mai 2013</small></p>");
+	if (window.location.protocol == "http:") document.writeln("<IMG SRC='http://www.webhits.de/cgi/Count.cgi?ft=0&sh=0&dd=B&pad=0&df=2643.dat' BORDER='0' WIDTH='1' HEIGHT='1'>");
+</SCRIPT>
+</div>
+</body>
+</html>
+

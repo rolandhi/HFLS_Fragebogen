@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<link rel='stylesheet' type='text/css' href='ffw.css'>
+</head>
+</HEAD><BODY onload="document.Import.cookie.focus();">
+<p>Hier kannst Du den Ausbildungsstand in <b>diesen Browser</b> auf <b>diesem Rechner</b> &uuml;bernehmen.
+<b class='rot'>Achtung:</b> Der zu importierende Benutzer muss der aktuelle Benutzer sein</p>
+<Form Name='Import' action='javascript:parent.Index.Einstellungen();'>
+<textarea name='cookie' value='' cols='80' rows='11' style='padding:0.5em; background:#efe; border:inset 2px black;'>
+</textarea>
+<p><b class='gruen'>Standard:</b> <input type='radio' name='bestof' value='1' checked> Gezielt nur bessere Noten &uuml;bernehmen<br>
+<b class='pink'>Ausnahme:</b> <input type='radio' name='bestof' value='0' onclick="alert('Vorsicht: Du kannst damit Deinen Wissenstand komplett loeschen')"> Bisherigen Wissenstand durch den importierten Wissenstand komplett &uuml;bernehmen (Achtung: ALLE Noten - auch bessere - werden rigeros &uuml;berschrieben)</p>
+<p><input type='radio' name='einst' value='1' checked> Einstellungen mit &uuml;bernehmen <br>
+<input type='radio' name='einst' value='0'> Einstellungen <B>nicht</B> &uuml;bernehmen - nur den Ausbildungsstand</p>
+<p><input type='submit' name='save' value='Ausbildungsstand &uuml;bernehmen' onclick='return parent.Index.importCookie();'> Je nach Erfolg erscheint eine Fehler- oder Erfolgsmeldung</p>
+</form>
+<h3>Import vom gleichen Rechner aus der Zwischenablage</h3>
+<ol>
+<li>Eingabefeld mit der Maus anklicken</li>
+<li>Mit der rechten Maustaste Einf&uuml;gen ausw&auml;hlen</li>
+<li>Den Button [Ausbildungsstand &uuml;bernehmen] anklicken</li>
+</ol>
+
+<h3>Import von einem anderen Rechner über USB-Stick, Email, Diskette</h3>
+<ol>
+<li>Textdatei mit den Daten &ouml;ffnen und den gesamte Text-Zeile mit [Strg][a] markieren.</li>
+<li>Mit der rechten Maustase aus dem Kontext-Men&uuml; den Befehl Kopieren ausw&auml;hlen.</li>
+<li>In den Browser wechseln</li>
+<li>Eingabefeld mit der Maus anklicken</li>
+<li>Mit der rechten Maustaste Einf&uuml;gen ausw&auml;hlen</li>
+<li>Den Button [Ausbildungsstand &uuml;bernehmen] anklicken</li>
+</ol>
+<p>Im Erfolgsfall landest Du auf Deiner Einstellungsseite.</p>
+</body>
+</html>

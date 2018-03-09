@@ -1,0 +1,12 @@
+Änderungen am Programm
+Der Ausbildungsstand wurde in der Verteilten Version 6.00 im Bereich Gerätekunde nicht korrekt gespeichert, ffw.idx am 06.06.09 korregiert
+Tippfehler (Frage 19) in ffw_K09 korregiert am 06.06.09
+
+Als Änderungen in der nächsten Ausgabe erwähnen
+
+Version 601 Überarbeitung 2010
+ffw_k09 Rettungsgeräte Frage 35 angepasst.
+ffw_k13 Lebensrettende Sofortmaßnahmen Frage 2 gelöscht.
+ffw_k7 löschgeräte keine Änderung gefunden.
+ffw_k22 Physische und psychische Belastung neu integriert
+ffw_k23 Rettungsgeräte eingebunden
